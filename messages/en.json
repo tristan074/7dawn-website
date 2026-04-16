@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "title": "7dawn — AI-native spacecraft design",
+    "description": "AI-native engineering · Lighting every star of New Space"
+  },
+  "nav": {
+    "product": "Product",
+    "directions": "Directions",
+    "team": "Team",
+    "contact": "Contact"
+  },
+  "hero": {
+    "label": "// 7DAWN · SINGULARITY DAWN",
+    "title1": "Beyond Singularity",
+    "title2": "Awaken the Stars",
+    "sub": "AI-native engineering · Lighting every star of New Space",
+    "cta": "Contact Us",
+    "scroll": "SCROLL"
+  },
+  "product": {
+    "label": "// CORE PRODUCT",
+    "title": "3Studio",
+    "lede": "The AI-native design engine for spacecraft. From mission brief to engineering-grade blueprint — one engineer, a crew of agents, the work of a team.",
+    "body": "3Studio decomposes the spacecraft design pipeline into orchestrated agent nodes: orbit, configuration, thermal, dynamics — each reasoning autonomously, cross-checking each other, and leaving an auditable digital trail.",
+    "tag1": "AGENT ORCHESTRATION",
+    "tag2": "DIGITAL TWIN",
+    "tag3": "ENGINEERING-GRADE",
+    "mockLabel": "3Studio · UI"
+  },
+  "directions": {
+    "label": "// DIRECTIONS",
+    "title1": "Three curves,",
+    "title2": "one singularity.",
+    "lede": "From design to orbit to collaboration — we are building AI infrastructure for the full lifecycle of commercial aerospace.",
+    "d1Title": "Spacecraft Design",
+    "d1Desc": "The main track. 3Studio covers system-level design through subsystem validation, extending into digital twin across the design–launch–orbit lifecycle.",
+    "d2Title": "Constellation Ops",
+    "d2Desc": "The second curve. Intelligent operations at the scale of 10,000+ satellites: collision avoidance, mission planning, fault prediction — AI proposes, humans decide.",
+    "d3Title": "Engineering Platform",
+    "d3Desc": "The horizon. An AI-native engineering collaboration platform for aerospace — toolchains, knowledge bases, and workflows absorbed into an agent mesh."
+  },
+  "team": {
+    "label": "// TEAM",
+    "title1": "Aerospace fluent.",
+    "title2": "AI native.",
+    "lede": "From Tsinghua and the Chinese Academy of Sciences — spanning spacecraft engineering, machine learning, and systems software. We have shipped at both the program-development frontline and the large-model industrialization frontline.",
+    "stat1Value": "Tsinghua · CAS",
+    "stat1Label": "Core team background",
+    "stat2ValuePrefix": "¥2–4B",
+    "stat2ValueUnit": "/ YR",
+    "stat2Label": "China spacecraft design software market",
+    "stat3Value": "2700+",
+    "stat3Label": "Company-wide AI agents at Blue Origin — our benchmark"
+  },
+  "contact": {
+    "label": "// CONTACT",
+    "title": "Let's talk.",
+    "lede": "Aerospace prime, early-stage investor, or fellow engineer — send us an email. We reply fast.",
+    "email": "EMAIL",
+    "phone": "PHONE"
+  },
+  "footer": {
+    "copy": "© 2026 7DAWN",
+    "city": "BEIJING"
+  }
+}
