@@ -106,11 +106,14 @@ export default function FogCanvas() {
     const uT1 = gl.getUniformLocation(program, "u_trail1");
     const uT2 = gl.getUniformLocation(program, "u_trail2");
 
-    let target = [0.5, 0.5];
-    const mouse = [0.5, 0.5];
-    const trail0 = [0.5, 0.5];
-    const trail1 = [0.5, 0.5];
-    const trail2 = [0.5, 0.5];
+    // Default position: top-left so the orb doesn't sit behind the centered title
+    // (WebGL UV: x=0 left, y=1 top)
+    const DEFAULT: [number, number] = [0.18, 0.82];
+    let target: [number, number] = [...DEFAULT];
+    const mouse: [number, number] = [...DEFAULT];
+    const trail0: [number, number] = [...DEFAULT];
+    const trail1: [number, number] = [...DEFAULT];
+    const trail2: [number, number] = [...DEFAULT];
 
     function resize() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
