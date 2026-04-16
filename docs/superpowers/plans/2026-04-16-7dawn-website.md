@@ -191,7 +191,7 @@ git commit -m "chore: bootstrap next.js 15 + typescript + tailwind v4"
   --color-bg: #1f2228;
   --color-text: #ffffff;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-sans: var(--font-geist-sans), "Noto Sans SC", system-ui, sans-serif;
+  --font-sans: var(--font-geist-sans), var(--font-noto-sc), system-ui, sans-serif;
 }
 
 @layer base {

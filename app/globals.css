@@ -4,7 +4,7 @@
   --color-bg: #1f2228;
   --color-text: #ffffff;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-sans: var(--font-geist-sans), "Noto Sans SC", system-ui, sans-serif;
+  --font-sans: var(--font-geist-sans), var(--font-noto-sc), system-ui, sans-serif;
 }
 
 @layer base {
@@ -23,6 +23,7 @@
     color: var(--color-text);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   *, *::before, *::after { box-sizing: border-box; }
