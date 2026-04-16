@@ -162,6 +162,10 @@ export default function FogCanvas() {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
+      gl!.deleteProgram(program);
+      gl!.deleteShader(vs);
+      gl!.deleteShader(fs);
+      gl!.deleteBuffer(buf);
     };
   }, []);
 
