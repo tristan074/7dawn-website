@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 7dawn · 奇点黎明 官网
 
-## Getting Started
+AI + 商业航天创业公司 7dawn 的官方网站。单页面双语设计。
 
-First, run the development server:
+线上地址：https://7dawn.ai
+
+## 技术栈
+
+- Next.js 15 App Router + TypeScript
+- Tailwind CSS v4
+- next-intl（中英双语路由）
+- Geist Mono / Geist Sans / Noto Sans SC（next/font 自托管）
+- 原生 WebGL（Hero 鼠标光雾效果）
+- IntersectionObserver（滚动渐入动画）
+
+## 视觉规范
+
+- xAI 式 monospace brutalist minimalism
+- 设计真相源：[`DESIGN_XAI.md`](./DESIGN_XAI.md)
+
+## 开发
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+访问 http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> Tip：Next.js 15.5 的 turbopack 编译 Noto Sans SC 有 bug，本项目 `dev` 和 `build` 均使用 webpack。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 测试
 
-## Learn More
+```bash
+pnpm test    # 跑 i18n 字典完整性测试（vitest）
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 部署
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+推送到 main 分支，Vercel 自动构建并部署到 https://7dawn.ai。
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 文档
 
-## Deploy on Vercel
+| 文档 | 内容 |
+|---|---|
+| [`DESIGN_XAI.md`](./DESIGN_XAI.md) | 视觉系统（颜色、字体、间距、组件） |
+| [`DESIGN_NOTES.md`](./DESIGN_NOTES.md) | 设计决策与参考 |
+| [`docs/superpowers/specs/2026-04-16-7dawn-website-design.md`](./docs/superpowers/specs/2026-04-16-7dawn-website-design.md) | MVP 设计规范 |
+| [`docs/superpowers/plans/2026-04-16-7dawn-website.md`](./docs/superpowers/plans/2026-04-16-7dawn-website.md) | 实施计划 |
+| `demo/index.html` | 视觉验证用的原始 demo（不在生产部署） |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 文件结构
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/
+  [locale]/
+    layout.tsx       # locale-aware：html lang、字体、metadata、i18n provider
+    page.tsx         # 单页面 MVP
+  layout.tsx         # 根 layout 透传
+  globals.css        # Tailwind + xAI tokens
+  robots.ts
+  sitemap.ts
+components/
+  Nav.tsx            # 顶部导航 + inline logo SVG
+  LangSwitch.tsx     # 中/EN 切换
+  Hero.tsx           # 主视觉
+  FogCanvas.tsx      # WebGL 鼠标光雾
+  Product.tsx        # 3Studio 介绍
+  Directions.tsx     # 三大方向
+  Team.tsx           # 团队背景
+  Contact.tsx        # 联系方式
+  Footer.tsx
+  ScrollReveal.tsx   # 通用滚动渐入包装
+i18n/
+  routing.ts         # locale 配置
+  request.ts         # 服务端字典加载
+messages/
+  zh.json
+  en.json
+middleware.ts        # next-intl 自动语言路由
+public/
+  7dawn-mark.svg     # logo（fill-rule="evenodd"，d/a 中空）
+tests/
+  i18n.test.ts       # 字典完整性 + 非空断言
+```
+
+## v2 路线
+
+- 卫星 / 火箭 3D Exploded → 滚动组装（Three.js + GSAP ScrollTrigger）
+- 独立 `/product/3studio` 详情页
+- 客户案例 + 投资人背书
+- 博客 / 新闻
+- Plausible / GA 分析
