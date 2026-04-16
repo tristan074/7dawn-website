@@ -106,3 +106,27 @@
     opacity: 0.6;
   }
 }
+
+@layer base {
+  .stat-value {
+    font-family: var(--font-mono);
+    font-size: clamp(32px, 3.2vw, 44px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .stat-value-text {
+    font-family: var(--font-sans);
+    font-size: clamp(24px, 2.4vw, 32px);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .stat-label {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+  }
+}
