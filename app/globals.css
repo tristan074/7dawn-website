@@ -37,3 +37,14 @@
     }
   }
 }
+
+@layer base {
+  .hero-title {
+    font-size: clamp(48px, 10vw, 140px);
+  }
+  html[lang="en"] .hero-title {
+    font-size: clamp(36px, 5.5vw, 84px);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+}

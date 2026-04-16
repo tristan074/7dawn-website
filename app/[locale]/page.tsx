@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import Nav from "@/components/Nav";
+import Hero from "@/components/Hero";
 
 export default async function Home({
   params,
@@ -12,8 +13,8 @@ export default async function Home({
   return (
     <>
       <Nav />
-      <main className="pt-24">
-        <h1 className="text-white p-8">7dawn · placeholder</h1>
+      <main>
+        <Hero />
       </main>
     </>
   );
