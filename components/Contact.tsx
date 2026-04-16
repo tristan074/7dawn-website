@@ -30,8 +30,8 @@ export default function Contact() {
                 {t("email")}
               </div>
               <div className="font-mono text-base">
-                <a href="mailto:hello@7dawn.ai" className="text-white transition-colors hover:text-white/50">
-                  hello@7dawn.ai
+                <a href="mailto:contact@7dawn.ai" className="text-white transition-colors hover:text-white/50">
+                  contact@7dawn.ai
                 </a>
               </div>
             </div>
@@ -42,8 +42,8 @@ export default function Contact() {
                 {t("phone")}
               </div>
               <div className="font-mono text-base">
-                <a href="tel:+8600000000000" className="text-white transition-colors hover:text-white/50">
-                  +86 000 0000 0000
+                <a href="tel:+8618810308915" className="text-white transition-colors hover:text-white/50">
+                  +86 188 1030 8915
                 </a>
               </div>
             </div>
