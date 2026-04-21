@@ -524,6 +524,14 @@
       ]
     }
   },
+  "cta": {
+    "kicker": "— Start your first workspace —",
+    "titleBefore": "从最难的",
+    "titleEm": "一颗卫星",
+    "titleAfter": "开始。",
+    "lead": "Cursor 做了软件工程的 AI 原生平台。3Studio 要做硬件 / 系统工程的。",
+    "button": "预约企业版演示"
+  },
   "footer": {
     "copy": "© 2026 7DAWN · 奇点黎明",
     "city": "BEIJING · 北京"

@@ -524,6 +524,14 @@
       ]
     }
   },
+  "cta": {
+    "kicker": "— Start your first workspace —",
+    "titleBefore": "Start from the hardest",
+    "titleEm": "single satellite",
+    "titleAfter": ".",
+    "lead": "Cursor built the AI-native platform for software engineering. 3Studio is building it for hardware and systems engineering.",
+    "button": "Book an enterprise demo"
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"
