@@ -56,6 +56,7 @@ export default function PlatformDossier() {
             const isActive = key === active;
             return (
               <button
+                type="button"
                 key={key}
                 onClick={() => setActive(key)}
                 className={`flex min-w-[140px] flex-col gap-2.5 border-r border-white/10 px-6 py-6 text-left transition-colors last:border-r-0 ${
