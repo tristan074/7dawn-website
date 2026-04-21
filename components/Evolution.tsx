@@ -81,7 +81,7 @@ export default function Evolution() {
                 </div>
                 <div className="text-right">
                   <div className="font-mono text-[30px] font-light tracking-[-0.01em]">
-                    <span dangerouslySetInnerHTML={{ __html: t(`stats.${i}.val`) }} />
+                    <span dangerouslySetInnerHTML={{ __html: t.raw(`stats.${i}.val`) as string }} />
                   </div>
                   <div className="mt-1 font-mono text-[10px] uppercase tracking-[1px] text-white/50">{t(`stats.${i}.delta`)}</div>
                 </div>

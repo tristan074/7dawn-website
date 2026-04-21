@@ -37,7 +37,7 @@ export default function PlatformDossier() {
             >
               <div
                 className="font-mono text-[40px] font-light leading-none tracking-[-0.01em]"
-                dangerouslySetInnerHTML={{ __html: t(`stats.${i}.num`) }}
+                dangerouslySetInnerHTML={{ __html: t.raw(`stats.${i}.num`) as string }}
               />
               <div className="mt-2 font-mono text-[11px] uppercase tracking-[1.6px] text-white/50">{t(`stats.${i}.lbl`)}</div>
             </div>
