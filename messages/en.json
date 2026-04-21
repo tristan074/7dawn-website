@@ -59,6 +59,41 @@
     "email": "EMAIL",
     "phone": "PHONE"
   },
+  "why": {
+    "titleBefore": "Three forces converging — ",
+    "titleEm": "a platform-level window opens",
+    "titleAfter": ".",
+    "lead": "Software engineering has Cursor. Hardware and systems engineering still don't have an AI-native platform.",
+    "items": {
+      "0": {
+        "kicker": "01 · MODEL",
+        "h3": "Agents move from Q&A to execution",
+        "bullets": {
+          "0": "From \"answering questions\" to \"running STK simulations and drafting verification reports\"",
+          "1": "Cursor hit $20B ARR at month 33",
+          "2": "Agents can now perform real engineering tasks"
+        }
+      },
+      "1": {
+        "kicker": "02 · SOFTWARE",
+        "h3": "Industrial software enters the AI-native layer",
+        "bullets": {
+          "0": "IDC: 22.4% penetration of AI-augmented industrial software by 2029",
+          "1": "China core industrial software TAM ¥76.5B in 2029",
+          "2": "CAD / CAE need an AI execution layer on top"
+        }
+      },
+      "2": {
+        "kicker": "03 · POLICY",
+        "h3": "The policy window is explicit",
+        "bullets": {
+          "0": "2026 government work report: \"promote AI agents\"",
+          "1": "\"Scale commercial AI adoption in priority industries\"",
+          "2": "\"Accelerate satellite internet development\""
+        }
+      }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"
