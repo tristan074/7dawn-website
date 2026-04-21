@@ -4,10 +4,10 @@
     "description": "AI-native engineering · Lighting every star of New Space"
   },
   "nav": {
-    "product": "Product",
-    "directions": "Directions",
-    "team": "Team",
-    "contact": "Contact"
+    "spaces": "Workspaces",
+    "harness": "Harness",
+    "evolution": "Evolution",
+    "market": "Market"
   },
   "hero": {
     "label": "// 7DAWN · SINGULARITY DAWN",

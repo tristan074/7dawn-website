@@ -21,10 +21,10 @@ export default function Nav() {
         <Logo />
       </Link>
       <ul className="hidden md:flex gap-8 list-none">
-        <li><a href="#product" className="text-white text-sm transition-colors hover:text-white/50">{t("product")}</a></li>
-        <li><a href="#directions" className="text-white text-sm transition-colors hover:text-white/50">{t("directions")}</a></li>
-        <li><a href="#team" className="text-white text-sm transition-colors hover:text-white/50">{t("team")}</a></li>
-        <li><a href="#contact" className="text-white text-sm transition-colors hover:text-white/50">{t("contact")}</a></li>
+        <li><a href="#spaces" className="text-white text-sm transition-colors hover:text-white/50">{t("spaces")}</a></li>
+        <li><a href="#harness" className="text-white text-sm transition-colors hover:text-white/50">{t("harness")}</a></li>
+        <li><a href="#evolution" className="text-white text-sm transition-colors hover:text-white/50">{t("evolution")}</a></li>
+        <li><a href="#market" className="text-white text-sm transition-colors hover:text-white/50">{t("market")}</a></li>
       </ul>
       <LangSwitch />
     </nav>

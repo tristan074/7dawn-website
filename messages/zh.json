@@ -4,10 +4,10 @@
     "description": "AI 原生智研 · 点亮商业航天的每一颗星"
   },
   "nav": {
-    "product": "产品",
-    "directions": "方向",
-    "team": "团队",
-    "contact": "联系"
+    "spaces": "工作空间",
+    "harness": "Harness",
+    "evolution": "进化",
+    "market": "市场"
   },
   "hero": {
     "label": "// 奇点黎明 · 7dawn",
