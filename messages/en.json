@@ -94,6 +94,20 @@
       }
     }
   },
+  "problem": {
+    "titleLine1": "Complex engineering still runs on",
+    "titleEm": "manual labor + tool fragmentation",
+    "titleAfter": ".",
+    "lead": "The gap is not a missing AI feature — it's the absence of a trustworthy AI-native engineering execution layer. A single satellite passes through 10+ tools; a validation cycle takes 2-4 weeks; rework consumes 30-40% of the design schedule.",
+    "items": {
+      "0": { "no": "01", "tag": "SILO", "h4": "Tool silos", "body": "STK / MATLAB / Thermal Desktop / CATIA / DOORS — engineers shuffle data by hand across 10+ windows.", "quant": "20-30% of working hours" },
+      "1": { "no": "02", "tag": "KNOWLEDGE", "h4": "Knowledge trapped in heads", "body": "“A 5° solar-array tilt shifts thermal boundaries” — lives only in the lead engineer's head; when they leave, so does the knowledge.", "quant": "New hire ramp: 6-12 months" },
+      "2": { "no": "03", "tag": "COLLAB", "h4": "Cross-discipline breakdown", "body": "Structural changes ripple to thermal and power, but communication happens in meetings — rework rates stay stubbornly high.", "quant": "Rework: 30-40% of design cycle" },
+      "3": { "no": "04", "tag": "PROCESS", "h4": "Process runs on nagging", "body": "Reviews, changes, BOM, AIT — chased over email and WeChat. No automated flow, no audit trail.", "quant": "Admin headcount: 15-25% of team" },
+      "4": { "no": "05", "tag": "VERIFY", "h4": "Verification is mostly manual", "body": "200+ tests per satellite — each configured, executed, compared, and written up by hand. Massive duplicated effort.", "quant": "A single verification cycle: 2-4 weeks" },
+      "5": { "no": "06", "tag": "TRUST", "h4": "Black-box AI is unusable", "body": "Aerospace / aviation / nuclear — failure costs are extreme. You need auditable, explainable, rollback-safe AI.", "quant": "Generic-LLM compliance rate < 40%" }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"
