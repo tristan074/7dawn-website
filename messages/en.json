@@ -108,6 +108,28 @@
       "5": { "no": "06", "tag": "TRUST", "h4": "Black-box AI is unusable", "body": "Aerospace / aviation / nuclear — failure costs are extreme. You need auditable, explainable, rollback-safe AI.", "quant": "Generic-LLM compliance rate < 40%" }
     }
   },
+  "spaces": {
+    "titleBefore": "One product — ",
+    "titleEm": "five workspaces",
+    "titleAfter": ".",
+    "lead": "Switch between them like Notion or Figma — all five share the same Core OS underneath; each surface is shaped to its scenario. Agent crews specialize, humans stay in the loop on review.",
+    "items": {
+      "0": { "code": "S-01", "numeral": "i", "nameEm": "Design", "nameText": "Design Space", "desc": "Concept design / simulation modeling / parameter exploration / technical documentation. Agents orchestrate STK and MATLAB for parameter sweeps; humans vet the rationale.", "tags": ["Multi-Agent", "Simulation", "DOE"], "outlinePrefix": "→ ", "outlineBold": "Design package", "outlineSuffix": ": plan + simulation + docs" },
+      "1": { "code": "S-02", "numeral": "ii", "nameEm": "Verify", "nameText": "Verify Space", "desc": "Test matrices / simulation-based validation / metric checks / failure attribution. Parses GJB standards to auto-generate matrices — miss rate down 70%.", "tags": ["Test Matrix", "GJB", "Evidence"], "outlinePrefix": "→ ", "outlineBold": "Verification report", "outlineSuffix": " + evidence bundle" },
+      "2": { "code": "S-03", "numeral": "iii", "nameEm": "Flow", "nameText": "Flow Space", "desc": "BOM / change / review / AIT / supply chain / quality trace. Change impact chains propagate automatically, preventing downstream rework.", "tags": ["BOM", "Change", "Supply"], "outlinePrefix": "→ ", "outlineBold": "Closed-loop change", "outlineSuffix": " + delivery evidence" },
+      "3": { "code": "S-04", "numeral": "iv", "nameEm": "Operate", "nameText": "Operate Space", "desc": "Telemetry / anomalies / RCA / runbooks / release rollback. Operations staffing goes from 0.5 person per satellite to 1 per 10-20 satellites.", "tags": ["Telemetry", "RCA", "OrbitOps"], "outlinePrefix": "→ ", "outlineBold": "Ops report", "outlineSuffix": " + response log" },
+      "4": { "code": "S-05", "numeral": "v", "nameEm": "Command", "nameText": "Command Space", "desc": "Program oversight + evolution dashboard. Leaders watch autonomous rate, intervention frequency, and first-pass rate trend in real time.", "tags": ["PMO", "Evolution", "KPI"], "outlinePrefix": "→ ", "outlineBold": "Program dashboard", "outlineSuffix": " + evolution metrics" }
+    },
+    "pack": {
+      "kicker": "Industry Pack · domain config",
+      "title": "Pick an industry template = load toolchain + standards + knowledge base",
+      "chip0": "Aerospace",
+      "chip1": "UAV",
+      "chip2": "Heavy Equipment",
+      "chip3": "Energy"
+    },
+    "orbitOps": { "body": "= Operate Space + Aerospace config — a flagship brand that can ship standalone" }
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"
