@@ -492,6 +492,38 @@
       "3": { "h5": "知识库覆盖率", "body": "组织隐性知识结构化落库比例（M2）。", "val": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">87</em>%", "delta": "↑ 47pp · 12m" }
     }
   },
+  "market": {
+    "titleLine1": "商业航天是切入口，",
+    "titleEm": "万亿级工程服务",
+    "titleAfter": "才是市场。",
+    "lead": "同一个 Core OS，换一套 Industry Pack —— 从航天复制到低空、装备、能源。Layer 1 核心平台 200-400 亿确定性强，Layer 2 产能化 500-1200 亿是成长空间。",
+    "tam": {
+      "ringLabels": {
+        "0": "Layer 3 · 2000-5000 亿",
+        "1": "Layer 2 · 500-1200 亿",
+        "2": "Layer 1 · 200-400 亿",
+        "som": "Y5 · 8-15 亿"
+      },
+      "layers": [
+        { "ix": "L3", "h5": "长期价值池", "body": "AI 重构知识密集型工程劳动", "value": "2000-5000<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\"> 亿</em>" },
+        { "ix": "L2", "h5": "工程产能可捕获", "body": "验证 / 变更 / 交付 / 运维的产能化", "value": "500-1200<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\"> 亿</em>" },
+        { "ix": "L1", "h5": "核心平台软件", "body": "AI 原生工程协作与执行层", "value": "200-400<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\"> 亿</em>" },
+        { "ix": "SAM", "h5": "优先 5 行业", "body": "航天 / 航空配套 / 低空 / 装备 / 能源", "value": "100-250<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\"> 亿</em>" },
+        { "ix": "SOM", "h5": "Y5 现实可获", "body": "Pro + Team + Enterprise + OrbitOps", "value": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">8-15</em> 亿" }
+      ]
+    },
+    "compete": {
+      "h3": "竞争 × 壁垒",
+      "header": ["维度", "3studio", "Epsilon3", "Synera", "通用 LLM", "自建"],
+      "rows": [
+        { "rh": "多人多 Agent", "cells": [ { "text": "● 原生", "level": "y" }, { "text": "— 无", "level": "n" }, { "text": "— 无", "level": "n" }, { "text": "○ 单轮", "level": "p" }, { "text": "◐ 单 Agent", "level": "p" } ] },
+        { "rh": "深度工具调用", "cells": [ { "text": "● MATLAB/STK/CAE", "level": "y" }, { "text": "— 无", "level": "n" }, { "text": "◐ 浅层参数", "level": "p" }, { "text": "— 无", "level": "n" }, { "text": "◐ 需自建", "level": "p" } ] },
+        { "rh": "Harness 治理", "cells": [ { "text": "● 完整", "level": "y" }, { "text": "— 无", "level": "n" }, { "text": "— 无", "level": "n" }, { "text": "— 无", "level": "n" }, { "text": "— 需自建", "level": "n" } ] },
+        { "rh": "进化可量化", "cells": [ { "text": "● M0/M1/M2 + RL", "level": "y" }, { "text": "— 无", "level": "n" }, { "text": "— 无", "level": "n" }, { "text": "◐ 浅", "level": "p" }, { "text": "— 需自建", "level": "n" } ] },
+        { "rh": "行业深度", "cells": [ { "text": "● 航天 → 跨行业", "level": "y" }, { "text": "◐ 航天流程", "level": "p" }, { "text": "— 浅", "level": "n" }, { "text": "— 浅", "level": "n" }, { "text": "◐ 取决于投入", "level": "p" } ] }
+      ]
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN · 奇点黎明",
     "city": "BEIJING · 北京"

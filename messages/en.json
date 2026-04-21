@@ -492,6 +492,38 @@
       "3": { "h5": "Knowledge coverage", "body": "Share of tacit organizational knowledge now structured in M2.", "val": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">87</em>%", "delta": "↑ 47pp · 12m" }
     }
   },
+  "market": {
+    "titleLine1": "Commercial aerospace is the wedge —",
+    "titleEm": "a trillion-yuan engineering-services market",
+    "titleAfter": " is the prize.",
+    "lead": "One Core OS, many Industry Packs — replicate from aerospace into UAV, heavy equipment, and energy. Layer 1 (¥20-40B core platform) is well-defined; Layer 2 (¥50-120B productized capacity) is the growth surface.",
+    "tam": {
+      "ringLabels": {
+        "0": "Layer 3 · ¥200-500B",
+        "1": "Layer 2 · ¥50-120B",
+        "2": "Layer 1 · ¥20-40B",
+        "som": "Y5 · ¥0.8-1.5B"
+      },
+      "layers": [
+        { "ix": "L3", "h5": "Long-term value pool", "body": "AI reshaping knowledge-intensive engineering labor", "value": "¥200-500<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">B</em>" },
+        { "ix": "L2", "h5": "Engineering capacity, productized", "body": "Validation / change / delivery / ops at production scale", "value": "¥50-120<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">B</em>" },
+        { "ix": "L1", "h5": "Core platform software", "body": "AI-native engineering collaboration & execution layer", "value": "¥20-40<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">B</em>" },
+        { "ix": "SAM", "h5": "Top 5 industries", "body": "Aerospace / aero-supply / UAV / heavy equipment / energy", "value": "¥10-25<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">B</em>" },
+        { "ix": "SOM", "h5": "Y5 realistic capture", "body": "Pro + Team + Enterprise + OrbitOps", "value": "¥<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">0.8-1.5</em>B" }
+      ]
+    },
+    "compete": {
+      "h3": "Competition × moat",
+      "header": ["Dimension", "3studio", "Epsilon3", "Synera", "Generic LLM", "Build in-house"],
+      "rows": [
+        { "rh": "Multi-human, multi-agent", "cells": [ { "text": "● native", "level": "y" }, { "text": "— none", "level": "n" }, { "text": "— none", "level": "n" }, { "text": "○ single-turn", "level": "p" }, { "text": "◐ single agent", "level": "p" } ] },
+        { "rh": "Deep tool calls", "cells": [ { "text": "● MATLAB/STK/CAE", "level": "y" }, { "text": "— none", "level": "n" }, { "text": "◐ shallow params", "level": "p" }, { "text": "— none", "level": "n" }, { "text": "◐ DIY", "level": "p" } ] },
+        { "rh": "Harness governance", "cells": [ { "text": "● full", "level": "y" }, { "text": "— none", "level": "n" }, { "text": "— none", "level": "n" }, { "text": "— none", "level": "n" }, { "text": "— DIY", "level": "n" } ] },
+        { "rh": "Quantified evolution", "cells": [ { "text": "● M0/M1/M2 + RL", "level": "y" }, { "text": "— none", "level": "n" }, { "text": "— none", "level": "n" }, { "text": "◐ shallow", "level": "p" }, { "text": "— DIY", "level": "n" } ] },
+        { "rh": "Industry depth", "cells": [ { "text": "● aerospace → cross-sector", "level": "y" }, { "text": "◐ aerospace ops", "level": "p" }, { "text": "— shallow", "level": "n" }, { "text": "— shallow", "level": "n" }, { "text": "◐ depends on spend", "level": "p" } ] }
+      ]
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"
