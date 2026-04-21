@@ -18,9 +18,6 @@
     "scroll": "SCROLL"
   },
   "contact": {
-    "label": "// 联系",
-    "title": "欢迎和我们聊聊。",
-    "lede": "无论你是航天链主、早期投资人,还是志同道合的工程师——先发一封邮件,我们很快回复。",
     "email": "EMAIL",
     "phone": "PHONE"
   },
@@ -495,7 +492,8 @@
     "titleEm": "一颗卫星",
     "titleAfter": "开始。",
     "lead": "Cursor 做了软件工程的 AI 原生平台。3Studio 要做硬件 / 系统工程的。",
-    "button": "预约企业版演示"
+    "button": "预约企业版演示",
+    "subject": "预约 3Studio 企业版演示"
   },
   "platform": {
     "stats": {

@@ -45,8 +45,10 @@ pnpm test    # 跑 i18n 字典完整性测试（vitest）
 |---|---|
 | [`DESIGN_XAI.md`](./DESIGN_XAI.md) | 视觉系统（颜色、字体、间距、组件） |
 | [`DESIGN_NOTES.md`](./DESIGN_NOTES.md) | 设计决策与参考 |
-| [`docs/superpowers/specs/2026-04-16-7dawn-website-design.md`](./docs/superpowers/specs/2026-04-16-7dawn-website-design.md) | MVP 设计规范 |
-| [`docs/superpowers/plans/2026-04-16-7dawn-website.md`](./docs/superpowers/plans/2026-04-16-7dawn-website.md) | 实施计划 |
+| [`docs/superpowers/specs/2026-04-16-7dawn-website-design.md`](./docs/superpowers/specs/2026-04-16-7dawn-website-design.md) | MVP 设计规范（首版 5 段） |
+| [`docs/superpowers/specs/2026-04-21-landing-3studio-upgrade-design.md`](./docs/superpowers/specs/2026-04-21-landing-3studio-upgrade-design.md) | 3Studio landing 升级设计规范 |
+| [`docs/superpowers/plans/2026-04-16-7dawn-website.md`](./docs/superpowers/plans/2026-04-16-7dawn-website.md) | MVP 实施计划 |
+| [`docs/superpowers/plans/2026-04-21-landing-3studio-upgrade.md`](./docs/superpowers/plans/2026-04-21-landing-3studio-upgrade.md) | 3Studio landing 实施计划 |
 | `demo/index.html` | 视觉验证用的原始 demo（不在生产部署） |
 
 ## 文件结构
@@ -61,16 +63,23 @@ app/
   robots.ts
   sitemap.ts
 components/
-  Nav.tsx            # 顶部导航 + inline logo SVG
-  LangSwitch.tsx     # 中/EN 切换
-  Hero.tsx           # 主视觉
-  FogCanvas.tsx      # WebGL 鼠标光雾
-  Product.tsx        # 3Studio 介绍
-  Directions.tsx     # 三大方向
-  Team.tsx           # 团队背景
-  Contact.tsx        # 联系方式
+  Nav.tsx              # 顶部导航 + inline logo SVG
+  LangSwitch.tsx       # 中/EN 切换
+  Hero.tsx             # 主视觉
+  FogCanvas.tsx        # WebGL 鼠标光雾
+  SectionHeader.tsx    # 通用段落头（idx / kicker / h2 / lead）
+  PlatformDossier.tsx  # 4 stats + 5-tab workspace switcher（唯一 client 组件）
+  WhyNow.tsx           # Why Now · 三股力量
+  Problem.tsx          # 六格痛点
+  Spaces.tsx           # 五工作空间 + Industry Pack + OrbitOps
+  Architecture.tsx     # Pack / Core / Industry Packs 三层
+  Harness.tsx          # Harness 治理 + audit log（dark section）
+  Scenarios.tsx        # 四场景 · IN/AGT/HUM/OUT + ROI
+  Evolution.tsx        # 进化曲线 + 4 指标
+  Market.tsx           # TAM 同心圆 + 分层表 + 竞争矩阵
+  CTAContact.tsx       # CTA 框 + email/phone
   Footer.tsx
-  ScrollReveal.tsx   # 通用滚动渐入包装
+  ScrollReveal.tsx     # 通用滚动渐入包装
 i18n/
   routing.ts         # locale 配置
   request.ts         # 服务端字典加载

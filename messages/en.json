@@ -18,9 +18,6 @@
     "scroll": "SCROLL"
   },
   "contact": {
-    "label": "// CONTACT",
-    "title": "Let's talk.",
-    "lede": "Aerospace prime, early-stage investor, or fellow engineer — send us an email. We reply fast.",
     "email": "EMAIL",
     "phone": "PHONE"
   },
@@ -495,7 +492,8 @@
     "titleEm": "single satellite",
     "titleAfter": ".",
     "lead": "Cursor built the AI-native platform for software engineering. 3Studio is building it for hardware and systems engineering.",
-    "button": "Book an enterprise demo"
+    "button": "Book an enterprise demo",
+    "subject": "Book a 3Studio enterprise demo"
   },
   "platform": {
     "stats": {

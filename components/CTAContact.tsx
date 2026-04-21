@@ -22,7 +22,7 @@ export default function CTAContact() {
             </div>
             <div className="flex flex-col gap-2.5">
               <a
-                href="mailto:contact@7dawn.ai?subject=Book%20a%20demo"
+                href={`mailto:contact@7dawn.ai?subject=${encodeURIComponent(t("subject"))}`}
                 className="btn btn-primary justify-center px-6 py-3.5"
               >
                 {t("button")} →
