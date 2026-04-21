@@ -395,6 +395,86 @@
       ]
     }
   },
+  "scenarios": {
+    "titleLine1": "从设计到交付到运行 —",
+    "titleEm": "已在航天场景验证",
+    "titleAfter": "。",
+    "lead": "每个场景都有明确的输入 / Agent 执行 / 人审核 / 输出 / ROI。Phase 1 先打穿 Design + Verify，Phase 2 扩展到 Flow + Operate。",
+    "items": {
+      "0": {
+        "scn": "SCN · A",
+        "cat": "Design",
+        "h4em": "卫星姿轨控",
+        "h4text": "设计",
+        "flow": {
+          "in": "轨道 500km SSO · 指向 0.1°",
+          "agt": "STK 轨道仿真 · MATLAB 控制律 · 50+ 组参数扫描",
+          "hum": "审核方案合理性 · 选定最优",
+          "out": "设计包 + 对比报告 + 变更记录"
+        },
+        "roi": {
+          "bigBefore": "3w ",
+          "bigEm": "→",
+          "bigAfter": " 5d",
+          "small": "ROI 37×"
+        }
+      },
+      "1": {
+        "scn": "SCN · D",
+        "cat": "Verify",
+        "h4em": "热控",
+        "h4text": "验证",
+        "flow": {
+          "in": "热控设计方案 · GJB 标准清单",
+          "agt": "解析标准 → 测试矩阵 200+ · Thermal Desktop 跑仿真",
+          "hum": "审核矩阵完备性 · 确认未通过项",
+          "out": "验证报告 + 测试证据包 + 合规矩阵"
+        },
+        "roi": {
+          "bigBefore": "2w ",
+          "bigEm": "→",
+          "bigAfter": " 2d",
+          "small": "漏测率 ↓ 70%"
+        }
+      },
+      "2": {
+        "scn": "SCN · G",
+        "cat": "Flow",
+        "h4em": "设计变更",
+        "h4text": "全链路",
+        "flow": {
+          "in": "变更请求 “太阳翼 X → Y”",
+          "agt": "追溯影响链（结构 / 热控 / 电源 / 姿态 / BOM）",
+          "hum": "审批变更 · 确认范围完整",
+          "out": "变更闭环记录 · 下游文档自动更新"
+        },
+        "roi": {
+          "bigBefore": "4w ",
+          "bigEm": "→",
+          "bigAfter": " 3d",
+          "small": "避免返工 50-200w"
+        }
+      },
+      "3": {
+        "scn": "SCN · J",
+        "cat": "OrbitOps",
+        "h4em": "星座",
+        "h4text": "在轨运维",
+        "flow": {
+          "in": "100 颗星实时遥测流 · 星座构型",
+          "agt": "遥测语义化 · 异常检测 · 关联历史 RCA",
+          "hum": "确认异常等级 · 审批处置方案",
+          "out": "处置记录 · RCA 报告 · 健康仪表盘"
+        },
+        "roi": {
+          "bigBefore": "50 ",
+          "bigEm": "→",
+          "bigAfter": " 10",
+          "small": "年省 1200w"
+        }
+      }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN · 奇点黎明",
     "city": "BEIJING · 北京"

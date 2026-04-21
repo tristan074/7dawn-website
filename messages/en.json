@@ -395,6 +395,86 @@
       ]
     }
   },
+  "scenarios": {
+    "titleLine1": "From design to delivery to orbit —",
+    "titleEm": "validated in real aerospace programs",
+    "titleAfter": ".",
+    "lead": "Every scenario has a defined input, agent execution, human review, output, and ROI. Phase 1 punches through Design + Verify; Phase 2 extends to Flow + Operate.",
+    "items": {
+      "0": {
+        "scn": "SCN · A",
+        "cat": "Design",
+        "h4em": "Satellite GNC",
+        "h4text": "design",
+        "flow": {
+          "in": "Orbit 500km SSO · pointing 0.1°",
+          "agt": "STK orbit sim · MATLAB control law · 50+ parameter sweep",
+          "hum": "Vet the rationale · pick the optimum",
+          "out": "Design package + comparison report + change log"
+        },
+        "roi": {
+          "bigBefore": "3w ",
+          "bigEm": "→",
+          "bigAfter": " 5d",
+          "small": "ROI 37×"
+        }
+      },
+      "1": {
+        "scn": "SCN · D",
+        "cat": "Verify",
+        "h4em": "Thermal",
+        "h4text": "verification",
+        "flow": {
+          "in": "Thermal design · GJB standards list",
+          "agt": "Parse standards → 200+ test matrix · Thermal Desktop runs",
+          "hum": "Vet matrix completeness · confirm failures",
+          "out": "Verification report + evidence bundle + compliance matrix"
+        },
+        "roi": {
+          "bigBefore": "2w ",
+          "bigEm": "→",
+          "bigAfter": " 2d",
+          "small": "Miss rate ↓ 70%"
+        }
+      },
+      "2": {
+        "scn": "SCN · G",
+        "cat": "Flow",
+        "h4em": "Design change",
+        "h4text": "end-to-end",
+        "flow": {
+          "in": "Change request \"solar array X → Y\"",
+          "agt": "Trace impact chain (structure / thermal / power / attitude / BOM)",
+          "hum": "Approve change · confirm scope completeness",
+          "out": "Closed-loop change log · downstream docs auto-updated"
+        },
+        "roi": {
+          "bigBefore": "4w ",
+          "bigEm": "→",
+          "bigAfter": " 3d",
+          "small": "Rework avoided ¥0.5-2M"
+        }
+      },
+      "3": {
+        "scn": "SCN · J",
+        "cat": "OrbitOps",
+        "h4em": "Constellation",
+        "h4text": "in-orbit ops",
+        "flow": {
+          "in": "Real-time telemetry from 100 satellites · constellation config",
+          "agt": "Telemetry semantics · anomaly detection · correlate historical RCA",
+          "hum": "Confirm severity · approve response plan",
+          "out": "Response log · RCA report · health dashboard"
+        },
+        "roi": {
+          "bigBefore": "50 ",
+          "bigEm": "→",
+          "bigAfter": " 10",
+          "small": "¥12M saved per year"
+        }
+      }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"
