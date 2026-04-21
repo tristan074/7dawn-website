@@ -475,6 +475,23 @@
       }
     }
   },
+  "evolution": {
+    "titleBefore": "人机共进化 — ",
+    "titleEm": "用得越多越聪明",
+    "titleAfter": "。",
+    "lead": "每一次人工审核、每一次 Agent 执行、每一次问题归因都在喂养知识引擎。M0 即时记忆 → M1 项目记忆 → M2 组织记忆 — 用一年的客户，Agent 比新客户聪明 10 倍。",
+    "chart": {
+      "head": "— 进化仪表盘 · 过去 12 个月 —",
+      "now": "95",
+      "legend": { "0": "Agent 自主完成率", "1": "首次通过率", "2": "人工干预频率" }
+    },
+    "stats": {
+      "0": { "h5": "Agent 自主完成率", "body": "从 60% → 95%，临界转折在 M6。", "val": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">95</em>%", "delta": "↑ 35pp · 12m" },
+      "1": { "h5": "人工干预频率", "body": "每个任务从 5 次 → 0.4 次。专家时间释放 >80%。", "val": "0.4<span style=\"font-size:15px;color:rgba(255,255,255,0.5)\">/任务</span>", "delta": "↓ 92% · 12m" },
+      "2": { "h5": "首次通过率", "body": "Design → Verify 一次闭环通过比例。", "val": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">92</em>%", "delta": "↑ 22pp · 12m" },
+      "3": { "h5": "知识库覆盖率", "body": "组织隐性知识结构化落库比例（M2）。", "val": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">87</em>%", "delta": "↑ 47pp · 12m" }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN · 奇点黎明",
     "city": "BEIJING · 北京"

@@ -475,6 +475,23 @@
       }
     }
   },
+  "evolution": {
+    "titleBefore": "Human-AI co-evolution — ",
+    "titleEm": "smarter the more you use it",
+    "titleAfter": ".",
+    "lead": "Every human review, every agent execution, every failure attribution feeds the knowledge engine. M0 session memory → M1 project memory → M2 organizational memory — after one year, a customer's agent is 10× smarter than a new one.",
+    "chart": {
+      "head": "— Evolution dashboard · last 12 months —",
+      "now": "95",
+      "legend": { "0": "Autonomous rate", "1": "First-pass rate", "2": "Intervention frequency" }
+    },
+    "stats": {
+      "0": { "h5": "Autonomous rate", "body": "60% → 95%; the tipping point hit at M6.", "val": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">95</em>%", "delta": "↑ 35pp · 12m" },
+      "1": { "h5": "Intervention frequency", "body": "From 5/task → 0.4/task. Expert time freed > 80%.", "val": "0.4<span style=\"font-size:15px;color:rgba(255,255,255,0.5)\">/task</span>", "delta": "↓ 92% · 12m" },
+      "2": { "h5": "First-pass rate", "body": "Design → Verify pass rate on the first loop.", "val": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">92</em>%", "delta": "↑ 22pp · 12m" },
+      "3": { "h5": "Knowledge coverage", "body": "Share of tacit organizational knowledge now structured in M2.", "val": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">87</em>%", "delta": "↑ 47pp · 12m" }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"
