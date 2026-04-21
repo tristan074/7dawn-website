@@ -532,6 +532,112 @@
     "lead": "Cursor built the AI-native platform for software engineering. 3Studio is building it for hardware and systems engineering.",
     "button": "Book an enterprise demo"
   },
+  "platform": {
+    "stats": {
+      "0": { "num": "5<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">+</em>", "lbl": "Workspaces" },
+      "1": { "num": "M0<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">→</em>M2", "lbl": "Three-tier memory" },
+      "2": { "num": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">99</em>%", "lbl": "Auditable execution" },
+      "3": { "num": "4<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">×</em>", "lbl": "Industry Packs" }
+    },
+    "switcher": {
+      "title": "— 3Studio Platform · Workspace Switcher —",
+      "live": "LIVE · switch like Notion / Figma",
+      "metricsLabel": "Metrics"
+    },
+    "foot": {
+      "industry": "Industry config: Aerospace Pack · STK / MATLAB / Thermal Desktop / GJB",
+      "orbitops": "OrbitOps = Operate + Aerospace Pack"
+    },
+    "tabs": {
+      "design":  { "code": "S-01", "nameEm": "Design",  "nameText": "Design Space",  "sub": "Agents do design" },
+      "verify":  { "code": "S-02", "nameEm": "Verify",  "nameText": "Verify Space",  "sub": "Agents run verification" },
+      "flow":    { "code": "S-03", "nameEm": "Flow",    "nameText": "Flow Space",    "sub": "Multi-human, multi-agent flow" },
+      "operate": { "code": "S-04", "nameEm": "Operate", "nameText": "Operate Space", "sub": "Monitor + anomaly response" },
+      "command": { "code": "S-05", "nameEm": "Command", "nameText": "Command Space", "sub": "Oversight + evolution" }
+    },
+    "bodies": {
+      "design": {
+        "title": "Running · Design Session #DS-204",
+        "steps": [
+          { "ix": "T-01", "name": "STK orbit sim · 500km SSO", "st": "pass" },
+          { "ix": "T-02", "name": "MATLAB control law design", "st": "pass" },
+          { "ix": "T-03", "name": "Parameter sweep 52/100 · DOE", "st": "run" },
+          { "ix": "T-04", "name": "Multi-discipline interface check", "st": "wait" },
+          { "ix": "T-05", "name": "Generate design package · Draft", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "Active agents", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">4</em> · Orbit / ATC / DOE / Doc" },
+          { "k": "Param exploration", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">52</em> / 100" },
+          { "k": "Design cycle", "v": "3w → <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">5d</em>" },
+          { "k": "First-pass rate", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">92</em>%" }
+        ]
+      },
+      "verify": {
+        "title": "Running · Verify Session #VR-081",
+        "steps": [
+          { "ix": "V-01", "name": "Parse GJB standards → test matrix", "st": "pass" },
+          { "ix": "V-02", "name": "Thermal Desktop · hot-soak", "st": "pass" },
+          { "ix": "V-03", "name": "Thermal Desktop · cold-survival", "st": "pass" },
+          { "ix": "V-04", "name": "Vibration sim · sine / random", "st": "run" },
+          { "ix": "V-05", "name": "Failure attribution", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "Test items", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">216</em>" },
+          { "k": "Completed", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">168</em> / 216" },
+          { "k": "Coverage", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">99.2</em>%" },
+          { "k": "Miss rate", "v": "↓ <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">70</em>%" }
+        ]
+      },
+      "flow": {
+        "title": "Running · Change Request #CR-0417",
+        "steps": [
+          { "ix": "F-01", "name": "Parse change · solar array 60° → 62°", "st": "pass" },
+          { "ix": "F-02", "name": "Impact-chain trace · 6 modules", "st": "pass" },
+          { "ix": "F-03", "name": "Generate impact report", "st": "pass" },
+          { "ix": "F-04", "name": "Tiered approval · chief engineer signature", "st": "wait" },
+          { "ix": "F-05", "name": "Downstream docs / BOM update", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "Affected modules", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">6</em> · structure / thermal / power / attitude / BOM / doc" },
+          { "k": "Approval tier", "v": "L2 chief → L1 quality" },
+          { "k": "Change cycle", "v": "4w → <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">3d</em>" },
+          { "k": "Miss rate", "v": "↓ <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">80</em>%" }
+        ]
+      },
+      "operate": {
+        "title": "LIVE · OrbitOps · 104 satellites",
+        "steps": [
+          { "ix": "O-01", "name": "Telemetry ingest · 104 in-orbit", "st": "pass" },
+          { "ix": "O-02", "name": "Anomaly detection · sat #37 power", "st": "pass" },
+          { "ix": "O-03", "name": "RCA · correlate history #2024-ST-19", "st": "run" },
+          { "ix": "O-04", "name": "Runbook recommend · power switch", "st": "wait" },
+          { "ix": "O-05", "name": "Human confirm response plan", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "In-orbit sats", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">104</em> · 98% healthy" },
+          { "k": "Anomaly response", "v": "hours → <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">minutes</em>" },
+          { "k": "Ops headcount", "v": "50 → <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">10</em>" },
+          { "k": "Yearly savings", "v": "¥ <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">12</em>M" }
+        ]
+      },
+      "command": {
+        "title": "Command · Program dashboard",
+        "steps": [
+          { "ix": "P-01", "name": "Satellite XX-3 progress · 82%", "st": "pass" },
+          { "ix": "P-02", "name": "Risk · thermal margin tightening", "st": "run" },
+          { "ix": "P-03", "name": "Milestone · AIT kickoff D-14", "st": "run" },
+          { "ix": "P-04", "name": "Evolution · autonomous rate rising", "st": "pass" },
+          { "ix": "P-05", "name": "Resource · GPU / sim cluster 68%", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "Active programs", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">7</em> · 3 priority" },
+          { "k": "Autonomous rate", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">95</em>%" },
+          { "k": "Intervention", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">0.4</em> / task" },
+          { "k": "Knowledge coverage", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">87</em>%" }
+        ]
+      }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"

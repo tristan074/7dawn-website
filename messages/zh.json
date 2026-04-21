@@ -532,6 +532,112 @@
     "lead": "Cursor 做了软件工程的 AI 原生平台。3Studio 要做硬件 / 系统工程的。",
     "button": "预约企业版演示"
   },
+  "platform": {
+    "stats": {
+      "0": { "num": "5<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">+</em>", "lbl": "工作空间 Workspaces" },
+      "1": { "num": "M0<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">→</em>M2", "lbl": "三层记忆架构" },
+      "2": { "num": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">99</em>%", "lbl": "可审计执行率" },
+      "3": { "num": "4<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">×</em>", "lbl": "行业适配包" }
+    },
+    "switcher": {
+      "title": "— 3Studio Platform · Workspace Switcher —",
+      "live": "LIVE · 像 Notion/Figma 那样切换",
+      "metricsLabel": "Metrics"
+    },
+    "foot": {
+      "industry": "行业配置：Aerospace Pack · STK / MATLAB / Thermal Desktop / GJB",
+      "orbitops": "OrbitOps = Operate + Aerospace Pack"
+    },
+    "tabs": {
+      "design":  { "code": "S-01", "nameEm": "Design",  "nameText": "设计", "sub": "Agent 团队做设计" },
+      "verify":  { "code": "S-02", "nameEm": "Verify",  "nameText": "验证", "sub": "Agent 团队做验证" },
+      "flow":    { "code": "S-03", "nameEm": "Flow",    "nameText": "流程", "sub": "多人多 Agent 流转" },
+      "operate": { "code": "S-04", "nameEm": "Operate", "nameText": "运维", "sub": "监控 + 异常处置" },
+      "command": { "code": "S-05", "nameEm": "Command", "nameText": "指挥", "sub": "项目统筹 + 进化" }
+    },
+    "bodies": {
+      "design": {
+        "title": "运行中 · Design Session #DS-204",
+        "steps": [
+          { "ix": "T-01", "name": "STK 轨道仿真 · 500km SSO", "st": "pass" },
+          { "ix": "T-02", "name": "MATLAB 控制律设计", "st": "pass" },
+          { "ix": "T-03", "name": "参数扫描 52 组 · DOE", "st": "run" },
+          { "ix": "T-04", "name": "多学科接口检查", "st": "wait" },
+          { "ix": "T-05", "name": "生成设计包 · Draft", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "活跃 Agent", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">4</em> · Orbit / ATC / DOE / Doc" },
+          { "k": "参数探索", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">52</em> / 100 组" },
+          { "k": "设计周期", "v": "3w → <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">5d</em>" },
+          { "k": "首次通过率", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">92</em>%" }
+        ]
+      },
+      "verify": {
+        "title": "运行中 · Verify Session #VR-081",
+        "steps": [
+          { "ix": "V-01", "name": "解析 GJB 标准 → 测试矩阵", "st": "pass" },
+          { "ix": "V-02", "name": "Thermal Desktop · hot-soak", "st": "pass" },
+          { "ix": "V-03", "name": "Thermal Desktop · cold-survival", "st": "pass" },
+          { "ix": "V-04", "name": "振动仿真 · 正弦/随机", "st": "run" },
+          { "ix": "V-05", "name": "未通过项归因", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "测试项", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">216</em> 条" },
+          { "k": "已完成", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">168</em> / 216" },
+          { "k": "覆盖率", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">99.2</em>%" },
+          { "k": "漏测率", "v": "↓ <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">70</em>%" }
+        ]
+      },
+      "flow": {
+        "title": "运行中 · Change Request #CR-0417",
+        "steps": [
+          { "ix": "F-01", "name": "解析变更 · 太阳翼 60° → 62°", "st": "pass" },
+          { "ix": "F-02", "name": "影响链追溯 · 6 模块", "st": "pass" },
+          { "ix": "F-03", "name": "生成影响评估报告", "st": "pass" },
+          { "ix": "F-04", "name": "分级审批 · 等待总师签字", "st": "wait" },
+          { "ix": "F-05", "name": "下游文档 / BOM 更新", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "受影响模块", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">6</em> · 结构/热/电/姿/BOM/文档" },
+          { "k": "审批层级", "v": "L2 总师 → L1 质量" },
+          { "k": "变更处理", "v": "4w → <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">3d</em>" },
+          { "k": "遗漏率", "v": "↓ <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">80</em>%" }
+        ]
+      },
+      "operate": {
+        "title": "LIVE · OrbitOps · 104 satellites",
+        "steps": [
+          { "ix": "O-01", "name": "遥测摄入 · 104 颗在轨星", "st": "pass" },
+          { "ix": "O-02", "name": "异常检测 · 星 #37 电源", "st": "pass" },
+          { "ix": "O-03", "name": "RCA · 关联历史 #2024-ST-19", "st": "run" },
+          { "ix": "O-04", "name": "推荐 Runbook · 电源切换", "st": "wait" },
+          { "ix": "O-05", "name": "人工确认处置方案", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "在轨卫星", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">104</em> · 健康 98%" },
+          { "k": "异常响应", "v": "小时级 → <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">分钟级</em>" },
+          { "k": "运维人力", "v": "50 → <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">10</em> 人" },
+          { "k": "年省成本", "v": "¥ <em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">1200</em>w" }
+        ]
+      },
+      "command": {
+        "title": "指挥空间 · 项目仪表盘",
+        "steps": [
+          { "ix": "P-01", "name": "XX-3 号卫星总体进度 · 82%", "st": "pass" },
+          { "ix": "P-02", "name": "风险 · 热控裕度收紧", "st": "run" },
+          { "ix": "P-03", "name": "里程碑 · AIT 启动 D-14", "st": "run" },
+          { "ix": "P-04", "name": "进化指标 · 自主完成率上升", "st": "pass" },
+          { "ix": "P-05", "name": "资源 · GPU / 仿真集群 68%", "st": "wait" }
+        ],
+        "stats": [
+          { "k": "活跃项目", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">7</em> · 3 重点型号" },
+          { "k": "Agent 自主率", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">95</em>%" },
+          { "k": "干预频率", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">0.4</em> / 任务" },
+          { "k": "知识覆盖", "v": "<em style=\"font-style:italic;color:rgba(255,255,255,0.5)\">87</em>%" }
+        ]
+      }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN · 奇点黎明",
     "city": "BEIJING · 北京"
