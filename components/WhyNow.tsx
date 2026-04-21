@@ -25,9 +25,21 @@ export default function WhyNow() {
         </ScrollReveal>
 
         <div className="grid grid-cols-1 border-t border-white/20 md:grid-cols-3">
-          {items.map((i) => (
-            <ScrollReveal key={i}>
-              <div className="flex min-h-[280px] flex-col gap-4 border-b border-white/10 py-8 md:border-b-0 md:border-r md:px-7 md:pr-7 md:[&:last-child]:border-r-0 md:[&:last-child]:pr-0 md:[&:first-child]:pl-0">
+          {items.map((i) => {
+            const isFirst = i === 0;
+            const isLast = i === items.length - 1;
+            return (
+              <ScrollReveal
+                key={i}
+                className={[
+                  "flex min-h-[280px] flex-col gap-4 border-b border-white/10 py-8",
+                  "md:border-b-0 md:border-r md:px-7",
+                  isFirst && "md:pl-0",
+                  isLast && "md:border-r-0 md:pr-0",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              >
                 <div className="flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[1.8px] text-white/50">
                   <span>{t(`items.${i}.kicker`)}</span>
                   <span className="text-2xl text-white/30">→</span>
@@ -43,9 +55,9 @@ export default function WhyNow() {
                     </li>
                   ))}
                 </ul>
-              </div>
-            </ScrollReveal>
-          ))}
+              </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </section>
