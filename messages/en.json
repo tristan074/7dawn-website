@@ -100,12 +100,48 @@
     "titleAfter": ".",
     "lead": "The gap is not a missing AI feature — it's the absence of a trustworthy AI-native engineering execution layer. A single satellite passes through 10+ tools; a validation cycle takes 2-4 weeks; rework consumes 30-40% of the design schedule.",
     "items": {
-      "0": { "no": "01", "tag": "SILO", "h4": "Tool silos", "body": "STK / MATLAB / Thermal Desktop / CATIA / DOORS — engineers shuffle data by hand across 10+ windows.", "quant": "20-30% of working hours" },
-      "1": { "no": "02", "tag": "KNOWLEDGE", "h4": "Knowledge trapped in heads", "body": "“A 5° solar-array tilt shifts thermal boundaries” — lives only in the lead engineer's head; when they leave, so does the knowledge.", "quant": "New hire ramp: 6-12 months" },
-      "2": { "no": "03", "tag": "COLLAB", "h4": "Cross-discipline breakdown", "body": "Structural changes ripple to thermal and power, but communication happens in meetings — rework rates stay stubbornly high.", "quant": "Rework: 30-40% of design cycle" },
-      "3": { "no": "04", "tag": "PROCESS", "h4": "Process runs on nagging", "body": "Reviews, changes, BOM, AIT — chased over email and WeChat. No automated flow, no audit trail.", "quant": "Admin headcount: 15-25% of team" },
-      "4": { "no": "05", "tag": "VERIFY", "h4": "Verification is mostly manual", "body": "200+ tests per satellite — each configured, executed, compared, and written up by hand. Massive duplicated effort.", "quant": "A single verification cycle: 2-4 weeks" },
-      "5": { "no": "06", "tag": "TRUST", "h4": "Black-box AI is unusable", "body": "Aerospace / aviation / nuclear — failure costs are extreme. You need auditable, explainable, rollback-safe AI.", "quant": "Generic-LLM compliance rate < 40%" }
+      "0": {
+        "no": "01",
+        "tag": "SILO",
+        "h4": "Tool silos",
+        "body": "STK / MATLAB / Thermal Desktop / CATIA / DOORS — engineers shuffle data by hand across 10+ windows.",
+        "quant": "20-30% of working hours"
+      },
+      "1": {
+        "no": "02",
+        "tag": "KNOWLEDGE",
+        "h4": "Knowledge trapped in heads",
+        "body": "“A 5° solar-array tilt shifts thermal boundaries” — lives only in the lead engineer's head; when they leave, so does the knowledge.",
+        "quant": "New hire ramp: 6-12 months"
+      },
+      "2": {
+        "no": "03",
+        "tag": "COLLAB",
+        "h4": "Cross-discipline breakdown",
+        "body": "Structural changes ripple to thermal and power, but communication happens in meetings — rework rates stay stubbornly high.",
+        "quant": "Rework: 30-40% of design cycle"
+      },
+      "3": {
+        "no": "04",
+        "tag": "PROCESS",
+        "h4": "Process runs on nagging",
+        "body": "Reviews, changes, BOM, AIT — chased over email and WeChat. No automated flow, no audit trail.",
+        "quant": "Admin headcount: 15-25% of team"
+      },
+      "4": {
+        "no": "05",
+        "tag": "VERIFY",
+        "h4": "Verification is mostly manual",
+        "body": "200+ tests per satellite — each configured, executed, compared, and written up by hand. Massive duplicated effort.",
+        "quant": "A single verification cycle: 2-4 weeks"
+      },
+      "5": {
+        "no": "06",
+        "tag": "TRUST",
+        "h4": "Black-box AI is unusable",
+        "body": "Aerospace / aviation / nuclear — failure costs are extreme. You need auditable, explainable, rollback-safe AI.",
+        "quant": "Generic-LLM compliance rate < 40%"
+      }
     }
   },
   "spaces": {
@@ -114,11 +150,81 @@
     "titleAfter": ".",
     "lead": "Switch between them like Notion or Figma — all five share the same Core OS underneath; each surface is shaped to its scenario. Agent crews specialize, humans stay in the loop on review.",
     "items": {
-      "0": { "code": "S-01", "numeral": "i", "nameEm": "Design", "nameText": "Design Space", "desc": "Concept design / simulation modeling / parameter exploration / technical documentation. Agents orchestrate STK and MATLAB for parameter sweeps; humans vet the rationale.", "tags": ["Multi-Agent", "Simulation", "DOE"], "outlinePrefix": "→ ", "outlineBold": "Design package", "outlineSuffix": ": plan + simulation + docs" },
-      "1": { "code": "S-02", "numeral": "ii", "nameEm": "Verify", "nameText": "Verify Space", "desc": "Test matrices / simulation-based validation / metric checks / failure attribution. Parses GJB standards to auto-generate matrices — miss rate down 70%.", "tags": ["Test Matrix", "GJB", "Evidence"], "outlinePrefix": "→ ", "outlineBold": "Verification report", "outlineSuffix": " + evidence bundle" },
-      "2": { "code": "S-03", "numeral": "iii", "nameEm": "Flow", "nameText": "Flow Space", "desc": "BOM / change / review / AIT / supply chain / quality trace. Change impact chains propagate automatically, preventing downstream rework.", "tags": ["BOM", "Change", "Supply"], "outlinePrefix": "→ ", "outlineBold": "Closed-loop change", "outlineSuffix": " + delivery evidence" },
-      "3": { "code": "S-04", "numeral": "iv", "nameEm": "Operate", "nameText": "Operate Space", "desc": "Telemetry / anomalies / RCA / runbooks / release rollback. Operations staffing goes from 0.5 person per satellite to 1 per 10-20 satellites.", "tags": ["Telemetry", "RCA", "OrbitOps"], "outlinePrefix": "→ ", "outlineBold": "Ops report", "outlineSuffix": " + response log" },
-      "4": { "code": "S-05", "numeral": "v", "nameEm": "Command", "nameText": "Command Space", "desc": "Program oversight + evolution dashboard. Leaders watch autonomous rate, intervention frequency, and first-pass rate trend in real time.", "tags": ["PMO", "Evolution", "KPI"], "outlinePrefix": "→ ", "outlineBold": "Program dashboard", "outlineSuffix": " + evolution metrics" }
+      "0": {
+        "code": "S-01",
+        "numeral": "i",
+        "nameEm": "Design",
+        "nameText": "Design Space",
+        "desc": "Concept design / simulation modeling / parameter exploration / technical documentation. Agents orchestrate STK and MATLAB for parameter sweeps; humans vet the rationale.",
+        "tags": [
+          "Multi-Agent",
+          "Simulation",
+          "DOE"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "Design package",
+        "outlineSuffix": ": plan + simulation + docs"
+      },
+      "1": {
+        "code": "S-02",
+        "numeral": "ii",
+        "nameEm": "Verify",
+        "nameText": "Verify Space",
+        "desc": "Test matrices / simulation-based validation / metric checks / failure attribution. Parses GJB standards to auto-generate matrices — miss rate down 70%.",
+        "tags": [
+          "Test Matrix",
+          "GJB",
+          "Evidence"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "Verification report",
+        "outlineSuffix": " + evidence bundle"
+      },
+      "2": {
+        "code": "S-03",
+        "numeral": "iii",
+        "nameEm": "Flow",
+        "nameText": "Flow Space",
+        "desc": "BOM / change / review / AIT / supply chain / quality trace. Change impact chains propagate automatically, preventing downstream rework.",
+        "tags": [
+          "BOM",
+          "Change",
+          "Supply"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "Closed-loop change",
+        "outlineSuffix": " + delivery evidence"
+      },
+      "3": {
+        "code": "S-04",
+        "numeral": "iv",
+        "nameEm": "Operate",
+        "nameText": "Operate Space",
+        "desc": "Telemetry / anomalies / RCA / runbooks / release rollback. Operations staffing goes from 0.5 person per satellite to 1 per 10-20 satellites.",
+        "tags": [
+          "Telemetry",
+          "RCA",
+          "OrbitOps"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "Ops report",
+        "outlineSuffix": " + response log"
+      },
+      "4": {
+        "code": "S-05",
+        "numeral": "v",
+        "nameEm": "Command",
+        "nameText": "Command Space",
+        "desc": "Program oversight + evolution dashboard. Leaders watch autonomous rate, intervention frequency, and first-pass rate trend in real time.",
+        "tags": [
+          "PMO",
+          "Evolution",
+          "KPI"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "Program dashboard",
+        "outlineSuffix": " + evolution metrics"
+      }
     },
     "pack": {
       "kicker": "Industry Pack · domain config",
@@ -128,7 +234,9 @@
       "chip2": "Heavy Equipment",
       "chip3": "Energy"
     },
-    "orbitOps": { "body": "= Operate Space + Aerospace config — a flagship brand that can ship standalone" }
+    "orbitOps": {
+      "body": "= Operate Space + Aerospace config — a flagship brand that can ship standalone"
+    }
   },
   "architecture": {
     "titleBefore": "One ",
@@ -141,11 +249,26 @@
         "name": "Workspaces",
         "note": "Five workspaces",
         "cells": [
-          { "name": "Design", "note": "Design agents" },
-          { "name": "Verify", "note": "Verification agents" },
-          { "name": "Flow", "note": "Process agents" },
-          { "name": "Operate", "note": "Ops agents" },
-          { "name": "Command", "note": "Oversight + evolution" }
+          {
+            "name": "Design",
+            "note": "Design agents"
+          },
+          {
+            "name": "Verify",
+            "note": "Verification agents"
+          },
+          {
+            "name": "Flow",
+            "note": "Process agents"
+          },
+          {
+            "name": "Operate",
+            "note": "Ops agents"
+          },
+          {
+            "name": "Command",
+            "note": "Oversight + evolution"
+          }
         ]
       },
       "1": {
@@ -153,11 +276,26 @@
         "name": "Core OS",
         "note": "Platform foundation",
         "cells": [
-          { "name": "Multi-Agent Runtime", "note": "Multi-agent orchestration" },
-          { "name": "Harness Engine", "note": "Governance / audit / rollback" },
-          { "name": "Memory & Evolution", "note": "M0 / M1 / M2 + evolution" },
-          { "name": "Adaptation Workbench", "note": "Domain adaptation bench" },
-          { "name": "Tool Adapter SDK", "note": "Toolchain interface" }
+          {
+            "name": "Multi-Agent Runtime",
+            "note": "Multi-agent orchestration"
+          },
+          {
+            "name": "Harness Engine",
+            "note": "Governance / audit / rollback"
+          },
+          {
+            "name": "Memory & Evolution",
+            "note": "M0 / M1 / M2 + evolution"
+          },
+          {
+            "name": "Adaptation Workbench",
+            "note": "Domain adaptation bench"
+          },
+          {
+            "name": "Tool Adapter SDK",
+            "note": "Toolchain interface"
+          }
         ]
       },
       "2": {
@@ -165,12 +303,96 @@
         "name": "Industry Packs",
         "note": "Domain kits",
         "cells": [
-          { "name": "Aerospace", "note": "STK / GMAT / MATLAB · GJB" },
-          { "name": "UAV", "note": "Flight control / ground · airworthiness" },
-          { "name": "Automotive", "note": "CATIA / NASTRAN · auto standards" },
-          { "name": "Energy", "note": "Energy standards · toolchain" }
+          {
+            "name": "Aerospace",
+            "note": "STK / GMAT / MATLAB · GJB"
+          },
+          {
+            "name": "UAV",
+            "note": "Flight control / ground · airworthiness"
+          },
+          {
+            "name": "Automotive",
+            "note": "CATIA / NASTRAN · auto standards"
+          },
+          {
+            "name": "Energy",
+            "note": "Energy standards · toolchain"
+          }
         ]
       }
+    }
+  },
+  "harness": {
+    "titleBefore": "AI in a harness — ",
+    "titleEm": "auditable, rollback-safe, quantifiable",
+    "titleAfter": ".",
+    "lead": "In industries where mistakes are expensive, agents can't execute freely. Harness Engine builds whitelisting, tiered approval, full audit, and one-click rollback into the platform from day one — a paradigm, not a feature.",
+    "principles": {
+      "0": {
+        "h4": "Tool whitelist",
+        "body": "Agents can only call approved tools within approved parameter ranges; cross-org policy ships from one place."
+      },
+      "1": {
+        "h4": "Tiered approval",
+        "body": "Auto / semi-auto / manual. High-risk actions queue for a human signature; low-risk actions pass through."
+      },
+      "2": {
+        "h4": "Full audit log",
+        "body": "Every tool call, every decision, every prompt — hash-chained, archived, and ready for compliance review."
+      },
+      "3": {
+        "h4": "One-click rollback",
+        "body": "Any step can revert. Design snapshots, simulation seeds, document versions — all time-travelable."
+      },
+      "4": {
+        "h4": "Evolution is quantifiable",
+        "body": "Autonomous rate, intervention frequency, first-pass rate, knowledge coverage — leaders steer by the curves."
+      }
+    },
+    "demo": {
+      "head": {
+        "session": "audit-log · session #A7F-2041",
+        "anchored": "2026-04 · anchored"
+      },
+      "rows": [
+        {
+          "ix": "01",
+          "content": "call <b>stk.propagate</b>(orbit=500km-SSO)",
+          "sig": "sig: sha256:7b2c…e1",
+          "rc": "ok"
+        },
+        {
+          "ix": "02",
+          "content": "call <b>matlab.designATC</b>(gain_mtx)",
+          "sig": "sig: sha256:11af…4c",
+          "rc": "ok"
+        },
+        {
+          "ix": "03",
+          "content": "write <b>design_pkg/main.docx</b>(draft)",
+          "sig": "— awaiting review —",
+          "rc": "hold"
+        },
+        {
+          "ix": "04",
+          "content": "attempt <b>supplier.notify</b>(BOM change)",
+          "sig": "policy: L2 approval required",
+          "rc": "deny"
+        },
+        {
+          "ix": "05",
+          "content": "rollback to snapshot <b>#20260411-1704</b>",
+          "sig": "reverted by: Li Chengze",
+          "rc": "ok"
+        },
+        {
+          "ix": "06",
+          "content": "call <b>thermal.run</b>(case=hot-soak)",
+          "sig": "2.4 GB evidence archived",
+          "rc": "ok"
+        }
+      ]
     }
   },
   "footer": {

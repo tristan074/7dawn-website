@@ -100,12 +100,48 @@
     "titleAfter": "工作。",
     "lead": "不是缺某个 AI 功能，而是缺一个可信赖的 AI 原生工程执行层。一颗卫星要过 10+ 种工具，验证周期 2-4 周，返工占设计周期 30-40%。",
     "items": {
-      "0": { "no": "01", "tag": "孤岛", "h4": "工具孤岛", "body": "STK / MATLAB / Thermal Desktop / CATIA / DOORS — 工程师在 10+ 窗口间手动搬数据。", "quant": "占工作时间 20-30%" },
-      "1": { "no": "02", "tag": "知识", "h4": "知识锁在脑里", "body": "“太阳翼改 5° 会影响热控边界” — 只在资深总师脑子里，人走知识散。", "quant": "新人 ramp-up 6-12 月" },
-      "2": { "no": "03", "tag": "协作", "h4": "多学科协作断裂", "body": "结构改参数、热控改边界，跨学科影响靠“开会”传递，返工率居高不下。", "quant": "返工占设计周期 30-40%" },
-      "3": { "no": "04", "tag": "流程", "h4": "流程靠人盯", "body": "评审、变更、BOM、AIT 全靠邮件微信催，缺自动流转和审计追溯。", "quant": "管理人员占团队 15-25%" },
-      "4": { "no": "05", "tag": "验证", "h4": "验证大量手工", "body": "单颗卫星 200+ 测试项，每项配置、跑、对比、写报告——极大重复劳动。", "quant": "单次验证 2-4 周" },
-      "5": { "no": "06", "tag": "信任", "h4": "黑箱 AI 不可用", "body": "航天 / 航空 / 核能 — 错误代价极高，需要可审计、可解释、可回滚的 AI。", "quant": "通用 LLM 合规率 < 40%" }
+      "0": {
+        "no": "01",
+        "tag": "孤岛",
+        "h4": "工具孤岛",
+        "body": "STK / MATLAB / Thermal Desktop / CATIA / DOORS — 工程师在 10+ 窗口间手动搬数据。",
+        "quant": "占工作时间 20-30%"
+      },
+      "1": {
+        "no": "02",
+        "tag": "知识",
+        "h4": "知识锁在脑里",
+        "body": "“太阳翼改 5° 会影响热控边界” — 只在资深总师脑子里，人走知识散。",
+        "quant": "新人 ramp-up 6-12 月"
+      },
+      "2": {
+        "no": "03",
+        "tag": "协作",
+        "h4": "多学科协作断裂",
+        "body": "结构改参数、热控改边界，跨学科影响靠“开会”传递，返工率居高不下。",
+        "quant": "返工占设计周期 30-40%"
+      },
+      "3": {
+        "no": "04",
+        "tag": "流程",
+        "h4": "流程靠人盯",
+        "body": "评审、变更、BOM、AIT 全靠邮件微信催，缺自动流转和审计追溯。",
+        "quant": "管理人员占团队 15-25%"
+      },
+      "4": {
+        "no": "05",
+        "tag": "验证",
+        "h4": "验证大量手工",
+        "body": "单颗卫星 200+ 测试项，每项配置、跑、对比、写报告——极大重复劳动。",
+        "quant": "单次验证 2-4 周"
+      },
+      "5": {
+        "no": "06",
+        "tag": "信任",
+        "h4": "黑箱 AI 不可用",
+        "body": "航天 / 航空 / 核能 — 错误代价极高，需要可审计、可解释、可回滚的 AI。",
+        "quant": "通用 LLM 合规率 < 40%"
+      }
     }
   },
   "spaces": {
@@ -114,11 +150,81 @@
     "titleAfter": "。",
     "lead": "像 Notion / Figma 那样切换 — 底层共享同一个 Core OS，入口因场景而不同。Agent 团队各司其职，人始终在环审核。",
     "items": {
-      "0": { "code": "S-01", "numeral": "i", "nameEm": "Design", "nameText": "设计空间", "desc": "方案设计 / 仿真建模 / 参数探索 / 技术文档。Agent 调 STK + MATLAB 做参数扫描，人审核方案合理性。", "tags": ["Multi-Agent", "Simulation", "DOE"], "outlinePrefix": "→ ", "outlineBold": "设计包", "outlineSuffix": "：方案 + 仿真 + 文档" },
-      "1": { "code": "S-02", "numeral": "ii", "nameEm": "Verify", "nameText": "验证空间", "desc": "测试矩阵 / 仿真验证 / 指标检查 / 问题归因。解析 GJB 标准自动生成测试矩阵，漏测率降 70%。", "tags": ["Test Matrix", "GJB", "Evidence"], "outlinePrefix": "→ ", "outlineBold": "验证报告", "outlineSuffix": " + 证据包" },
-      "2": { "code": "S-03", "numeral": "iii", "nameEm": "Flow", "nameText": "流程空间", "desc": "BOM / 变更 / 评审 / AIT / 供应链 / 质量追溯。变更影响链自动追溯，避免下游返工。", "tags": ["BOM", "Change", "Supply"], "outlinePrefix": "→ ", "outlineBold": "变更闭环", "outlineSuffix": " + 交付证据" },
-      "3": { "code": "S-04", "numeral": "iv", "nameEm": "Operate", "nameText": "运维空间", "desc": "监控 / 异常 / RCA / Runbook / 发布回滚。运维从每颗星 0.5 人 → 每 10-20 颗星 1 人。", "tags": ["Telemetry", "RCA", "OrbitOps"], "outlinePrefix": "→ ", "outlineBold": "运行报告", "outlineSuffix": " + 处置记录" },
-      "4": { "code": "S-05", "numeral": "v", "nameEm": "Command", "nameText": "指挥空间", "desc": "项目统筹 + 进化仪表盘。让管理者看到 Agent 自主完成率、干预频率、首次通过率的变化曲线。", "tags": ["PMO", "Evolution", "KPI"], "outlinePrefix": "→ ", "outlineBold": "项目仪表盘", "outlineSuffix": " + 进化指标" }
+      "0": {
+        "code": "S-01",
+        "numeral": "i",
+        "nameEm": "Design",
+        "nameText": "设计空间",
+        "desc": "方案设计 / 仿真建模 / 参数探索 / 技术文档。Agent 调 STK + MATLAB 做参数扫描，人审核方案合理性。",
+        "tags": [
+          "Multi-Agent",
+          "Simulation",
+          "DOE"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "设计包",
+        "outlineSuffix": "：方案 + 仿真 + 文档"
+      },
+      "1": {
+        "code": "S-02",
+        "numeral": "ii",
+        "nameEm": "Verify",
+        "nameText": "验证空间",
+        "desc": "测试矩阵 / 仿真验证 / 指标检查 / 问题归因。解析 GJB 标准自动生成测试矩阵，漏测率降 70%。",
+        "tags": [
+          "Test Matrix",
+          "GJB",
+          "Evidence"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "验证报告",
+        "outlineSuffix": " + 证据包"
+      },
+      "2": {
+        "code": "S-03",
+        "numeral": "iii",
+        "nameEm": "Flow",
+        "nameText": "流程空间",
+        "desc": "BOM / 变更 / 评审 / AIT / 供应链 / 质量追溯。变更影响链自动追溯，避免下游返工。",
+        "tags": [
+          "BOM",
+          "Change",
+          "Supply"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "变更闭环",
+        "outlineSuffix": " + 交付证据"
+      },
+      "3": {
+        "code": "S-04",
+        "numeral": "iv",
+        "nameEm": "Operate",
+        "nameText": "运维空间",
+        "desc": "监控 / 异常 / RCA / Runbook / 发布回滚。运维从每颗星 0.5 人 → 每 10-20 颗星 1 人。",
+        "tags": [
+          "Telemetry",
+          "RCA",
+          "OrbitOps"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "运行报告",
+        "outlineSuffix": " + 处置记录"
+      },
+      "4": {
+        "code": "S-05",
+        "numeral": "v",
+        "nameEm": "Command",
+        "nameText": "指挥空间",
+        "desc": "项目统筹 + 进化仪表盘。让管理者看到 Agent 自主完成率、干预频率、首次通过率的变化曲线。",
+        "tags": [
+          "PMO",
+          "Evolution",
+          "KPI"
+        ],
+        "outlinePrefix": "→ ",
+        "outlineBold": "项目仪表盘",
+        "outlineSuffix": " + 进化指标"
+      }
     },
     "pack": {
       "kicker": "Industry Pack · 行业配置",
@@ -128,7 +234,9 @@
       "chip2": "高端装备",
       "chip3": "能源装备"
     },
-    "orbitOps": { "body": "= 运维空间 + 航天配置 — 可独立推广的旗舰品牌" }
+    "orbitOps": {
+      "body": "= 运维空间 + 航天配置 — 可独立推广的旗舰品牌"
+    }
   },
   "architecture": {
     "titleBefore": "一个 ",
@@ -141,11 +249,26 @@
         "name": "Workspaces",
         "note": "五个工作空间",
         "cells": [
-          { "name": "Design", "note": "设计 Agent" },
-          { "name": "Verify", "note": "验证 Agent" },
-          { "name": "Flow", "note": "流程 Agent" },
-          { "name": "Operate", "note": "运维 Agent" },
-          { "name": "Command", "note": "统筹 + 进化" }
+          {
+            "name": "Design",
+            "note": "设计 Agent"
+          },
+          {
+            "name": "Verify",
+            "note": "验证 Agent"
+          },
+          {
+            "name": "Flow",
+            "note": "流程 Agent"
+          },
+          {
+            "name": "Operate",
+            "note": "运维 Agent"
+          },
+          {
+            "name": "Command",
+            "note": "统筹 + 进化"
+          }
         ]
       },
       "1": {
@@ -153,11 +276,26 @@
         "name": "Core OS",
         "note": "平台底座",
         "cells": [
-          { "name": "Multi-Agent Runtime", "note": "多 Agent 协作引擎" },
-          { "name": "Harness Engine", "note": "治理 / 审计 / 回滚" },
-          { "name": "Memory & Evolution", "note": "M0 / M1 / M2 + 进化" },
-          { "name": "Adaptation Workbench", "note": "领域适配工作台" },
-          { "name": "Tool Adapter SDK", "note": "工具链接口" }
+          {
+            "name": "Multi-Agent Runtime",
+            "note": "多 Agent 协作引擎"
+          },
+          {
+            "name": "Harness Engine",
+            "note": "治理 / 审计 / 回滚"
+          },
+          {
+            "name": "Memory & Evolution",
+            "note": "M0 / M1 / M2 + 进化"
+          },
+          {
+            "name": "Adaptation Workbench",
+            "note": "领域适配工作台"
+          },
+          {
+            "name": "Tool Adapter SDK",
+            "note": "工具链接口"
+          }
         ]
       },
       "2": {
@@ -165,12 +303,96 @@
         "name": "Industry Packs",
         "note": "行业适配",
         "cells": [
-          { "name": "Aerospace", "note": "STK / GMAT / MATLAB · GJB" },
-          { "name": "UAV / 低空", "note": "飞控 / 地面站 · 适航" },
-          { "name": "Automotive", "note": "CATIA / NASTRAN · 车标" },
-          { "name": "Energy", "note": "能源行业标准 · 工具链" }
+          {
+            "name": "Aerospace",
+            "note": "STK / GMAT / MATLAB · GJB"
+          },
+          {
+            "name": "UAV / 低空",
+            "note": "飞控 / 地面站 · 适航"
+          },
+          {
+            "name": "Automotive",
+            "note": "CATIA / NASTRAN · 车标"
+          },
+          {
+            "name": "Energy",
+            "note": "能源行业标准 · 工具链"
+          }
         ]
       }
+    }
+  },
+  "harness": {
+    "titleBefore": "在缰绳下工作的 AI — ",
+    "titleEm": "可审计、可回滚、可量化",
+    "titleAfter": "。",
+    "lead": "在“错误代价极高”的行业，Agent 不能自由执行。Harness Engine 把白名单、分级审批、完整审计、一键回滚做在平台从第一天的设计里——这是范式，不是功能。",
+    "principles": {
+      "0": {
+        "h4": "工具白名单",
+        "body": "Agent 只能调用被批准的工具与参数范围，跨组织策略统一下发。"
+      },
+      "1": {
+        "h4": "分级审批",
+        "body": "自动 / 半自动 / 人工三档。高风险操作—进入队列等人签字；低风险操作—自动放行。"
+      },
+      "2": {
+        "h4": "完整审计日志",
+        "body": "每一次工具调用、每一个决策、每一条提示词—全链路 hash 化归档，支持合规审查。"
+      },
+      "3": {
+        "h4": "一键回滚",
+        "body": "任何步骤都可回退到之前状态。设计快照 / 仿真种子 / 文档版本—均可时间旅行。"
+      },
+      "4": {
+        "h4": "进化可量化",
+        "body": "自主完成率、干预频率、首次通过率、知识覆盖率—管理者看曲线做决策。"
+      }
+    },
+    "demo": {
+      "head": {
+        "session": "audit-log · session #A7F-2041",
+        "anchored": "2026-04 · anchored"
+      },
+      "rows": [
+        {
+          "ix": "01",
+          "content": "call <b>stk.propagate</b>(orbit=500km-SSO)",
+          "sig": "sig: sha256:7b2c…e1",
+          "rc": "ok"
+        },
+        {
+          "ix": "02",
+          "content": "call <b>matlab.designATC</b>(gain_mtx)",
+          "sig": "sig: sha256:11af…4c",
+          "rc": "ok"
+        },
+        {
+          "ix": "03",
+          "content": "write <b>design_pkg/main.docx</b>(draft)",
+          "sig": "— 等待评审 —",
+          "rc": "hold"
+        },
+        {
+          "ix": "04",
+          "content": "attempt <b>supplier.notify</b>(BOM change)",
+          "sig": "policy: 需 L2 审批",
+          "rc": "deny"
+        },
+        {
+          "ix": "05",
+          "content": "rollback to snapshot <b>#20260411-1704</b>",
+          "sig": "reverted by: 李承泽",
+          "rc": "ok"
+        },
+        {
+          "ix": "06",
+          "content": "call <b>thermal.run</b>(case=hot-soak)",
+          "sig": "2.4 GB 证据包已归档",
+          "rc": "ok"
+        }
+      ]
     }
   },
   "footer": {
