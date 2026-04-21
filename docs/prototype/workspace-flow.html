@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3studio · Flow 工作空间 · XX-3 号卫星</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<link rel="stylesheet" href="assets/3studio.css">
+<style>
+:root{--flow:var(--rust)}
+.app{display:grid;grid-template-columns:64px 260px 1fr;min-height:100vh}
+@media (max-width:1100px){.app{grid-template-columns:64px 1fr}.plist{display:none}}
+@media (max-width:760px){.app{grid-template-columns:1fr}.rail{display:none}}
+
+.rail{border-right:1px solid var(--line);background:var(--paper-elev);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;position:sticky;top:0;height:100vh}
+.rail .logo{width:32px;height:32px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--ink)}
+.rail a{width:40px;height:40px;border-radius:var(--r-s);display:flex;align-items:center;justify-content:center;color:var(--ink-mute);transition:all .15s;position:relative}
+.rail a svg{width:20px;height:20px}
+.rail a:hover{background:var(--paper-2);color:var(--ink)}
+.rail a.active{background:var(--ink);color:var(--paper)}
+.rail a .tip{position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 8px;border-radius:2px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:100}
+.rail a:hover .tip{opacity:1}
+.rail .spacer{flex:1}
+.rail .ru{width:32px;height:32px;border-radius:50%;background:var(--flow);color:var(--paper-ink);font-family:var(--serif);font-style:italic;font-weight:500;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:6px}
+
+.plist{border-right:1px solid var(--line);background:var(--paper);padding:18px 0;height:100vh;overflow-y:auto;position:sticky;top:0}
+.pl-head{padding:0 18px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.pl-head .kicker{margin-bottom:6px;font-size:9.5px}
+.pl-head h3{margin:0;font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-0.01em}
+.pl-head h3 em{font-style:italic;color:var(--flow);font-weight:400}
+.pl-head .proj{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--ink-mute)}
+.pl-sec{padding:14px 18px 6px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-mute);display:flex;justify-content:space-between;font-weight:500}
+.pl-item{padding:8px 18px 8px 22px;display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent}
+.pl-item:hover{background:var(--paper-1)}
+.pl-item.active{background:var(--paper-2);border-left-color:var(--flow);color:var(--ink);font-weight:500}
+.pl-item .pd{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:var(--grass)}
+.pl-item .pd.wait{background:var(--ochre)}
+.pl-item .pd.run{background:var(--teal);box-shadow:0 0 0 2px var(--teal-soft)}
+.pl-item .pd.fail{background:var(--rust)}
+.pl-item .pn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-item .pm{font-family:var(--mono);font-size:9.5px;color:var(--ink-mute);letter-spacing:0.08em}
+
+.main{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{border-bottom:1px solid var(--line);padding:14px 26px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:var(--paper-elev);flex-shrink:0}
+.crumbs{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase}
+.crumbs .sep{color:var(--ink-ghost)}
+.crumbs b{color:var(--ink);font-weight:500}
+.topbar-right{display:flex;gap:14px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;color:var(--ink-mute);text-transform:uppercase}
+.flow-dot{width:6px;height:6px;border-radius:50%;background:var(--flow);animation:pulse3s 1.8s infinite}
+
+.body{flex:1;overflow-y:auto;padding:24px 28px 60px}
+
+/* Flow hero - change ticker */
+.cr-hero{display:grid;grid-template-columns:1fr 1.3fr;gap:24px;margin-bottom:24px}
+@media (max-width:1100px){.cr-hero{grid-template-columns:1fr}}
+
+.cr-head{padding:22px 24px;border:1px solid var(--line-2);border-radius:var(--r-m);background:linear-gradient(135deg,var(--paper-elev) 0%, color-mix(in oklch, var(--flow) 5%, var(--paper-elev)) 100%);display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.cr-head::before{content:"";position:absolute;top:0;right:0;bottom:0;width:140px;background:repeating-linear-gradient(135deg,transparent,transparent 10px,color-mix(in oklch,var(--flow) 6%,transparent) 10px,color-mix(in oklch,var(--flow) 6%,transparent) 11px);pointer-events:none}
+.cr-head .kicker{color:var(--flow)}
+.cr-head h1{margin:0;font-family:var(--serif);font-size:28px;font-weight:500;letter-spacing:-0.018em;line-height:1.1;position:relative}
+.cr-head h1 em{font-style:italic;color:var(--flow);font-weight:400}
+.cr-head .sub{font-size:13.5px;color:var(--ink-dim);line-height:1.5;max-width:52ch;position:relative}
+.cr-head .badges{display:flex;gap:6px;flex-wrap:wrap;position:relative}
+
+/* Butterfly / radial impact */
+.imp{padding:22px 24px;border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);display:grid;grid-template-columns:1fr 220px 1fr;gap:0;align-items:center}
+.imp .imp-side{display:flex;flex-direction:column;gap:8px}
+.imp .imp-side h5{margin:0 0 4px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;color:var(--ink-mute);text-transform:uppercase}
+.imp .imp-row{display:flex;justify-content:space-between;padding:6px 10px;background:var(--paper-1);border-left:2px solid var(--line-2);border-radius:0 3px 3px 0;font-size:12.5px}
+.imp .imp-row.up{border-left-color:var(--teal)}
+.imp .imp-row.down{border-left-color:var(--flow)}
+.imp .imp-row b{font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:0.06em;font-weight:500}
+.imp .imp-center{display:flex;justify-content:center}
+.imp .imp-node{width:140px;height:140px;border-radius:50%;background:var(--ink);color:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px;text-align:center;position:relative}
+.imp .imp-node::before,.imp .imp-node::after{content:"";position:absolute;width:100%;height:100%;border:1px solid var(--flow);border-radius:50%;opacity:0.3;animation:ripple 2.5s infinite}
+.imp .imp-node::after{animation-delay:1.25s}
+@keyframes ripple{0%{transform:scale(1);opacity:0.4}100%{transform:scale(1.5);opacity:0}}
+.imp .imp-node .kk{font-family:var(--mono);font-size:9px;letter-spacing:0.2em;color:var(--teal-2);text-transform:uppercase}
+.imp .imp-node .nm{font-family:var(--serif);font-style:italic;font-size:18px;font-weight:500;margin:4px 0;line-height:1.15}
+.imp .imp-node .meta{font-family:var(--mono);font-size:9.5px;color:rgba(242,238,230,0.6);letter-spacing:0.08em}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);margin-bottom:24px;overflow:hidden}
+@media (max-width:1000px){.stats{grid-template-columns:repeat(3,1fr)}}
+.stats .sc{padding:14px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:3px}
+.stats .sc:last-child{border-right:0}
+.stats .sc .sl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;color:var(--ink-mute);text-transform:uppercase}
+.stats .sc .sv{font-family:var(--serif);font-weight:350;font-size:24px;letter-spacing:-0.015em;line-height:1.05}
+.stats .sc .sv em{font-style:italic;color:var(--flow);font-weight:400}
+.stats .sc .st{font-family:var(--mono);font-size:9.5px;color:var(--ink-mute);letter-spacing:0.06em}
+
+/* Kanban */
+.kb-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line-2)}
+.kb-head h2{margin:0;font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-0.015em}
+.kb-head h2 em{font-style:italic;color:var(--flow);font-weight:400}
+.kb-head .kb-right{display:flex;gap:10px;align-items:center;font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:0.08em}
+
+.kb{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:28px}
+@media (max-width:1200px){.kb{grid-template-columns:repeat(3,minmax(260px,1fr));overflow-x:auto}}
+
+.col{display:flex;flex-direction:column;gap:10px;background:var(--paper-elev);border:1px solid var(--line-2);border-radius:var(--r-m);padding:12px;min-height:420px}
+.col-head{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 10px;border-bottom:1px dashed var(--line-2)}
+.col-head h4{margin:0;font-family:var(--serif);font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px}
+.col-head h4 .dot{width:6px;height:6px;border-radius:50%}
+.col-head .ct{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.08em}
+.col[data-state="intake"] .col-head h4 .dot{background:var(--ink-mute)}
+.col[data-state="doing"] .col-head h4 .dot{background:var(--teal)}
+.col[data-state="review"] .col-head h4 .dot{background:var(--ochre)}
+.col[data-state="sync"] .col-head h4 .dot{background:var(--violet)}
+.col[data-state="done"] .col-head h4 .dot{background:var(--grass)}
+
+.card-t{background:var(--paper);border:1px solid var(--line-2);border-radius:3px;padding:12px 12px;display:flex;flex-direction:column;gap:8px;cursor:grab;transition:all .15s;position:relative}
+.card-t:hover{border-color:var(--line-3);box-shadow:0 1px 2px rgba(0,0,0,0.04)}
+.card-t::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent,var(--teal));border-radius:3px 0 0 3px}
+.card-t[data-pri="p1"]{--accent:var(--rust)}
+.card-t[data-pri="p2"]{--accent:var(--ochre)}
+.card-t[data-pri="p3"]{--accent:var(--teal)}
+.card-t[data-pri="p4"]{--accent:var(--ink-ghost)}
+.card-t .tt{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card-t .tt .tcode{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase}
+.card-t .tt .pri{font-family:var(--mono);font-size:8.5px;letter-spacing:0.14em;padding:1px 5px;border-radius:2px;font-weight:500;text-transform:uppercase}
+.card-t[data-pri="p1"] .pri{background:var(--rust);color:var(--paper-ink)}
+.card-t[data-pri="p2"] .pri{background:var(--ochre);color:var(--ink)}
+.card-t[data-pri="p3"] .pri{background:var(--teal);color:var(--paper-ink)}
+.card-t[data-pri="p4"] .pri{background:var(--paper-2);color:var(--ink-2);border:1px solid var(--line-2)}
+.card-t h5{margin:0;font-family:var(--serif);font-size:14.5px;font-weight:500;letter-spacing:-0.005em;line-height:1.25}
+.card-t .desc{font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);line-height:1.5;letter-spacing:0.02em}
+.card-t .meta{display:flex;flex-wrap:wrap;gap:4px}
+.card-t .meta .m{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;padding:2px 5px;border:1px solid var(--line-2);border-radius:2px;color:var(--ink-mute);text-transform:uppercase}
+.card-t .foot{display:flex;justify-content:space-between;align-items:center;padding-top:6px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:9.5px;color:var(--ink-mute);letter-spacing:0.06em}
+.card-t .foot .who{display:flex;align-items:center;gap:4px}
+.card-t .foot .av{width:18px;height:18px;border-radius:50%;background:var(--teal);color:var(--paper-ink);font-family:var(--serif);font-style:italic;font-size:10px;display:flex;align-items:center;justify-content:center;font-weight:500}
+.card-t .foot .av.agent{background:var(--ink);color:var(--teal-2)}
+.card-t .foot .av.human{background:var(--rust)}
+.card-t .agent-proposal{padding:8px 10px;background:color-mix(in oklch, var(--teal) 7%, var(--paper));border-left:2px solid var(--teal);border-radius:0 3px 3px 0;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);line-height:1.55;letter-spacing:0.01em}
+.card-t .agent-proposal b{font-family:var(--sans);letter-spacing:0;color:var(--teal);font-weight:500}
+
+/* BOM diff table */
+.bom-card{border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);overflow:hidden;margin-bottom:24px}
+.bom-head{padding:14px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--paper-elev)}
+.bom-head h3{margin:0;font-family:var(--serif);font-size:17px;font-weight:500;display:flex;align-items:center;gap:10px}
+.bom-head h3 .glyph{width:20px;height:20px;color:var(--flow)}
+.bom-head .cr{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.1em;text-transform:uppercase;display:flex;gap:10px}
+
+.bom{display:grid;grid-template-columns:auto 1.8fr 1fr 1fr auto auto;font-family:var(--mono);font-size:11.5px}
+.bom .bh{padding:10px 14px;background:var(--paper-2);color:var(--ink-mute);letter-spacing:0.1em;text-transform:uppercase;font-size:9.5px;border-bottom:1px solid var(--line);font-weight:500}
+.bom .bc{padding:10px 14px;border-bottom:1px dashed var(--line)}
+.bom .bc.pn{font-weight:500;color:var(--ink);font-size:12px}
+.bom .bc.pn span{display:block;font-size:10px;color:var(--ink-mute);letter-spacing:0.04em;margin-top:2px;font-weight:400}
+.bom .bc .old{color:var(--ink-mute);text-decoration:line-through}
+.bom .bc .new{color:var(--grass)}
+.bom .bc .new.down{color:var(--flow)}
+.bom .bc .chg{font-family:var(--sans);padding:1px 6px;border-radius:2px;font-size:10px;letter-spacing:0.04em}
+.bom .bc .chg.up{background:var(--grass-soft);color:var(--grass)}
+.bom .bc .chg.dn{background:var(--rust-soft);color:var(--flow)}
+.bom .bc .chg.mod{background:var(--violet-soft);color:var(--violet)}
+.bom .br{display:contents}
+.bom .br:hover .bc{background:var(--paper-1)}
+
+/* Timeline - critical path */
+.timeline{border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);overflow:hidden;margin-bottom:24px}
+.tl-body{padding:20px 24px;overflow-x:auto}
+.tl-grid{display:grid;grid-template-columns:180px repeat(8,1fr);gap:0;min-width:900px;position:relative}
+.tl-hd{padding:6px 8px;text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;color:var(--ink-mute);text-transform:uppercase;border-bottom:1px solid var(--line);border-right:1px dashed var(--line)}
+.tl-hd:first-child{text-align:left;border-right:1px solid var(--line-2)}
+.tl-hd:last-child{border-right:0}
+.tl-row{display:contents}
+.tl-label{padding:12px 8px;font-size:12.5px;border-bottom:1px dashed var(--line);border-right:1px solid var(--line-2);display:flex;flex-direction:column;gap:2px}
+.tl-label b{font-weight:500}
+.tl-label span{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.04em}
+.tl-cell{border-bottom:1px dashed var(--line);border-right:1px dashed var(--line);min-height:48px;position:relative}
+.tl-cell:last-child{border-right:0}
+.tl-bar{position:absolute;top:8px;height:18px;border-radius:3px;font-family:var(--mono);font-size:9.5px;color:var(--paper-ink);display:flex;align-items:center;padding:0 8px;letter-spacing:0.06em;font-weight:500;white-space:nowrap;overflow:hidden}
+.tl-bar.d{background:var(--ink);color:var(--paper)}
+.tl-bar.v{background:var(--grass)}
+.tl-bar.f{background:var(--flow)}
+.tl-bar.p{background:var(--violet)}
+.tl-bar.o{background:var(--ink-2);color:var(--teal-2)}
+.tl-bar.crit{outline:2px solid var(--rust);outline-offset:-2px}
+.tl-now{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--rust);z-index:5}
+.tl-now::after{content:"NOW";position:absolute;top:-14px;left:-14px;font-family:var(--mono);font-size:8.5px;color:var(--rust);font-weight:500;letter-spacing:0.14em}
+
+/* Right panel summary */
+.side-card{border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);overflow:hidden;margin-bottom:16px}
+.sc-head{padding:12px 16px;border-bottom:1px solid var(--line);background:var(--paper-elev);display:flex;justify-content:space-between;align-items:center}
+.sc-head h4{margin:0;font-family:var(--serif);font-size:14px;font-weight:500}
+.sc-head .c{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.1em}
+
+/* Approval ticks */
+.aprow{padding:12px 16px;border-bottom:1px dashed var(--line);display:flex;flex-direction:column;gap:6px}
+.aprow:last-child{border-bottom:0}
+.ap-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ap-top b{font-family:var(--serif);font-size:14px;font-weight:500;letter-spacing:-0.005em}
+.ap-top .lv{font-family:var(--mono);font-size:9px;padding:2px 5px;border-radius:2px;letter-spacing:0.1em;font-weight:500}
+.ap-top .lv.l3{background:var(--rust);color:var(--paper-ink)}
+.ap-top .lv.l2{background:var(--ochre);color:var(--ink)}
+.ap-top .lv.l1{background:var(--grass);color:var(--paper-ink)}
+.ap-steps{display:flex;align-items:center;gap:0;font-family:var(--mono);font-size:9.5px}
+.ap-step{display:flex;align-items:center;gap:4px;padding:3px 0;flex:1}
+.ap-step .dot{width:8px;height:8px;border-radius:50%;background:var(--line-2);flex-shrink:0}
+.ap-step .dot.done{background:var(--grass)}
+.ap-step .dot.cur{background:var(--teal);box-shadow:0 0 0 2px var(--teal-soft)}
+.ap-step .line{flex:1;height:1px;background:var(--line-2);margin:0 4px}
+.ap-step.done+.ap-step .line,.ap-step.done .line{background:var(--grass)}
+.ap-step span{color:var(--ink-mute);letter-spacing:0.04em;font-size:9px;text-transform:uppercase}
+.ap-step.cur span{color:var(--teal);font-weight:500}
+.ap-step.done span{color:var(--ink-2)}
+.ap-meta{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.04em}
+
+/* Supplier list */
+.sup{padding:12px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border-bottom:1px dashed var(--line);font-size:12.5px}
+.sup:last-child{border-bottom:0}
+.sup .s-bar{width:5px;height:28px;background:var(--grass);border-radius:1px}
+.sup.warn .s-bar{background:var(--ochre)}
+.sup.late .s-bar{background:var(--rust)}
+.sup .s-text b{font-weight:500;display:block}
+.sup .s-text span{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.04em}
+.sup .s-v{font-family:var(--mono);font-size:11px;letter-spacing:0.06em;text-align:right}
+.sup .s-v .vn{font-weight:500;color:var(--ink)}
+.sup .s-v .vs{color:var(--ink-mute);font-size:9.5px}
+
+/* Propagation graph */
+.prop{padding:18px 20px}
+.prop-title{font-family:var(--mono);font-size:10px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase;margin-bottom:14px;display:flex;justify-content:space-between}
+.prop-root{display:flex;justify-content:center;margin-bottom:6px}
+.prop-chip{padding:6px 14px;background:var(--ink);color:var(--paper);border-radius:3px;font-family:var(--serif);font-style:italic;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:8px}
+.prop-chip .t{font-family:var(--mono);font-style:normal;font-size:9px;color:var(--teal-2);letter-spacing:0.14em;padding:1px 5px;border:1px solid var(--teal);border-radius:2px}
+.prop-branches{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;margin-top:18px;position:relative}
+.prop-branches::before{content:"";position:absolute;top:-12px;left:50%;width:66%;height:12px;border-left:1px solid var(--line-2);border-top:1px solid var(--line-2);border-right:1px solid var(--line-2);transform:translateX(-50%);border-radius:3px 3px 0 0}
+.prop-branch{text-align:center;position:relative}
+.prop-branch::before{content:"";position:absolute;top:-12px;left:50%;width:1px;height:12px;background:var(--line-2)}
+.prop-branch h6{margin:0 0 6px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-mute)}
+.prop-branch .b-list{display:flex;flex-direction:column;gap:5px;align-items:center}
+.prop-branch .b-list span{font-size:11px;padding:3px 8px;background:var(--paper-1);border:1px solid var(--line);border-radius:2px;font-family:var(--mono);letter-spacing:0.02em;color:var(--ink-2)}
+.prop-branch .b-list span.chg{background:var(--flow);color:var(--paper-ink);border-color:var(--flow)}
+.prop-branch .b-list span.auto{border-style:dashed;color:var(--teal);border-color:color-mix(in oklch,var(--teal) 40%, transparent)}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a href="index.html" class="logo"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7 L14 3 L24 7 L14 11 Z" fill="currentColor" fill-opacity="0.08"/><path d="M4 14 L14 10 L24 14 L14 18 Z"/><path d="M4 21 L14 17 L24 21 L14 25 Z"/></svg></a>
+    <a href="app.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="5" height="5"/><rect x="10.5" y="2.5" width="5" height="5"/><rect x="2.5" y="10.5" width="5" height="5"/><rect x="10.5" y="10.5" width="5" height="5"/></svg><span class="tip">工作台</span></a>
+    <a href="workspace.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 15 L9 3 L15 15"/><path d="M6 11 L12 11"/></svg><span class="tip">Design</span></a>
+    <a href="workspace-verify.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="12" height="12"/><path d="M6 9 L8.5 11.5 L13 7"/></svg><span class="tip">Verify</span></a>
+    <a href="workspace-flow.html" class="active"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="9" r="5"/><path d="M9 4 L11 6 L9 8"/><path d="M9 14 L7 12 L9 10"/></svg><span class="tip">Flow</span></a>
+    <a href="workspace-operate.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 14 L7 7 L10 11 L16 4"/><circle cx="16" cy="4" r="1.2" fill="currentColor"/></svg><span class="tip">Operate</span></a>
+    <a href="workspace-command.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 15 L3 9 L6 9 L6 15"/><path d="M8 15 L8 5 L11 5 L11 15"/><path d="M13 15 L13 11 L16 11 L16 15"/></svg><span class="tip">Command</span></a>
+    <div class="spacer"></div>
+    <a href="#"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3 L9 15 M3 9 L15 9"/></svg><span class="tip">知识库</span></a>
+    <a href="#"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="9" r="6"/><path d="M9 5 L9 9 L12 11"/></svg><span class="tip">设置</span></a>
+    <div class="ru">李</div>
+  </aside>
+
+  <aside class="plist">
+    <div class="pl-head">
+      <div class="kicker">Space S-03</div>
+      <h3><em>Flow</em> 工作空间</h3>
+      <div class="proj"><span>XX-3 号卫星</span><span style="color:var(--ink);font-weight:500">PRJ-0217</span></div>
+    </div>
+
+    <div class="pl-sec"><span>变更请求</span><span>7</span></div>
+    <div class="pl-item active"><span class="pd run"></span><span class="pn">CR-0417 太阳翼角度</span><span class="pm">L3</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">CR-0419 热控系数更新</span><span class="pm">L2</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">CR-0418 PCDU 固件</span><span class="pm">L2</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">CR-0415 框架材料牌号</span><span class="pm">done</span></div>
+
+    <div class="pl-sec"><span>采购 / PO</span><span>14</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">氦气管路阀 × 6</span><span class="pm">¥48K</span></div>
+    <div class="pl-item"><span class="pd run"></span><span class="pn">星敏感器 EM 件</span><span class="pm">发运</span></div>
+    <div class="pl-item"><span class="pd fail"></span><span class="pn">动量轮批次</span><span class="pm">延期</span></div>
+
+    <div class="pl-sec"><span>里程碑</span><span>4</span></div>
+    <div class="pl-item"><span class="pd run"></span><span class="pn">CDR 关键设计评审</span><span class="pm">D-9</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">AIT 启动</span><span class="pm">D-14</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">总装完成</span><span class="pm">D-62</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">发射窗口</span><span class="pm">D-128</span></div>
+
+    <div class="pl-sec"><span>Flow Agent</span><span>4</span></div>
+    <div class="pl-item"><span class="pd run"></span><span class="pn">CR Agent · F-31</span><span class="pm">Busy</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">BOM Agent · F-32</span><span class="pm">Idle</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">PO Agent · F-33</span><span class="pm">Idle</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">Schedule Agent · F-34</span><span class="pm">Idle</span></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="crumbs">
+        <span>3studio</span><span class="sep">/</span>
+        <span>轨道辰光</span><span class="sep">/</span>
+        <span>Flow · S-03</span><span class="sep">/</span>
+        <b>变更流 · CR-0417</b>
+      </div>
+      <div class="topbar-right">
+        <span class="flow-dot"></span>
+        <span>7 CR · 14 PO · 12 模块同步中</span>
+        <span style="color:var(--ink-ghost)">|</span>
+        <span>关键路径 CDR · D-9</span>
+      </div>
+    </div>
+
+    <div class="body">
+      <!-- Hero: change + impact -->
+      <div class="cr-hero">
+        <div class="cr-head">
+          <div class="kicker">CR-0417 · Level-3 · 待你签字</div>
+          <h1>太阳翼展开角 <em>60° → 62°</em> · 变更请求</h1>
+          <p class="sub">Design 空间推送。基于 60 组 DOE + M2 组织记忆规则 "62±3°" · 热控裕度由 12.8% → 18.4%。影响 6 个下游模块，Agent 已预生成全部同步包。</p>
+          <div class="badges">
+            <span class="chip chip-rust">Level-3 · 总师签批</span>
+            <span class="chip">6 模块受影响</span>
+            <span class="chip">¥48k 额外物料</span>
+            <span class="chip chip-grass">关键路径 +0 天</span>
+            <span class="chip">提出 2h ago · 李承泽</span>
+          </div>
+        </div>
+
+        <div class="imp">
+          <div class="imp-side">
+            <h5>上游 · 依据</h5>
+            <div class="imp-row up"><span>DOE #23 入围</span><b>Design</b></div>
+            <div class="imp-row up"><span>M2 规则 · 62±3°</span><b>Memory</b></div>
+            <div class="imp-row up"><span>BUG-0417 RCA 建议</span><b>Verify</b></div>
+          </div>
+          <div class="imp-center">
+            <div class="imp-node">
+              <span class="kk">CR-0417</span>
+              <span class="nm">太阳翼<br>60 → 62°</span>
+              <span class="meta">PROPAGATING · 6</span>
+            </div>
+          </div>
+          <div class="imp-side">
+            <h5>下游 · 影响</h5>
+            <div class="imp-row down"><span>结构锁定机构</span><b>+1 件</b></div>
+            <div class="imp-row down"><span>热控散热面</span><b>重设计</b></div>
+            <div class="imp-row down"><span>电源 · 供电预算</span><b>+18W</b></div>
+            <div class="imp-row up"><span>Verify · 热控全套</span><b>回归</b></div>
+            <div class="imp-row down"><span>BOM 线束长度</span><b>+ 12cm</b></div>
+            <div class="imp-row down"><span>装配工艺 A-407</span><b>更新</b></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="sc"><span class="sl">变更 · 活跃</span><span class="sv"><em>7</em></span><span class="st">L3 × 2 · L2 × 3</span></div>
+        <div class="sc"><span class="sl">Auto-sync</span><span class="sv"><em>112</em>/128</span><span class="st">Agent 直接同步</span></div>
+        <div class="sc"><span class="sl">人工审</span><span class="sv"><em>16</em></span><span class="st">占 12.5%</span></div>
+        <div class="sc"><span class="sl">平均闭环</span><span class="sv"><em>4.8</em>h</span><span class="st">↓ 76% vs 季度均</span></div>
+        <div class="sc"><span class="sl">关键路径</span><span class="sv"><em>CDR</em> -9d</span><span class="st">nominal</span></div>
+        <div class="sc"><span class="sl">预算消耗</span><span class="sv"><em>84</em>%</span><span class="st">↑ 符合基线</span></div>
+      </div>
+
+      <!-- Kanban: change pipeline -->
+      <div class="kb-head">
+        <h2>变更 <em>Kanban</em> · CR 生命周期</h2>
+        <div class="kb-right">
+          <span>11 张卡 · 5 列</span>
+          <span style="color:var(--ink-ghost)">|</span>
+          <span>拖拽切换状态</span>
+          <button class="btn btn-ghost btn-sm">+ 新建变更</button>
+        </div>
+      </div>
+
+      <div class="kb">
+        <div class="col" data-state="intake">
+          <div class="col-head"><h4><span class="dot"></span>待研判 · Intake</h4><span class="ct">2</span></div>
+
+          <div class="card-t" data-pri="p2">
+            <div class="tt"><span class="tcode">CR-0420</span><span class="pri">P2</span></div>
+            <h5>推进器阀门批次变更</h5>
+            <div class="desc">供应商报 B 批次，接口完全兼容但密封圈材料不同。</div>
+            <div class="agent-proposal"><b>Agent 建议：</b>自动开展 168h 热真空小样测试 · 预计 3 天出结论 · 不占关键路径。</div>
+            <div class="foot"><div class="who"><span class="av agent">F</span><span>F-31 发起</span></div><span>15 min ago</span></div>
+          </div>
+
+          <div class="card-t" data-pri="p3">
+            <div class="tt"><span class="tcode">CR-0421</span><span class="pri">P3</span></div>
+            <h5>AOCS 控制律微调 (φ 增益 +0.04)</h5>
+            <div class="desc">Verify HIL 反馈 · 对极端姿态恢复性能有 4% 提升。</div>
+            <div class="foot"><div class="who"><span class="av">陈</span><span>陈工</span></div><span>32 min</span></div>
+          </div>
+        </div>
+
+        <div class="col" data-state="doing">
+          <div class="col-head"><h4><span class="dot"></span>影响分析 · Impact</h4><span class="ct">2</span></div>
+
+          <div class="card-t" data-pri="p1">
+            <div class="tt"><span class="tcode">CR-0419</span><span class="pri">P1</span></div>
+            <h5>热控系数 −0.02 → −0.035 V/°C</h5>
+            <div class="desc">Verify 空间世界模型校准结果 · Bus Voltage 温度衰减模型更新。</div>
+            <div class="agent-proposal"><b>BOM Agent：</b>扫描到影响模块 4 个 · 关联 Design 仿真 12 份 · 预生成同步包。</div>
+            <div class="meta"><span class="m">4 模块</span><span class="m">12 仿真</span><span class="m">系数</span></div>
+            <div class="foot"><div class="who"><span class="av agent">F</span><span>F-32 分析中</span></div><span>42% · 38m</span></div>
+          </div>
+
+          <div class="card-t" data-pri="p2">
+            <div class="tt"><span class="tcode">CR-0422</span><span class="pri">P2</span></div>
+            <h5>数传天线指向机构抗干扰</h5>
+            <div class="desc">在轨 #37 星遥测反馈（Operate 空间）· 增加带通滤波。</div>
+            <div class="foot"><div class="who"><span class="av agent">O</span><span>O-47 推送</span></div><span>1h · Operate→Flow</span></div>
+          </div>
+        </div>
+
+        <div class="col" data-state="review">
+          <div class="col-head"><h4><span class="dot"></span>Harness 审批</h4><span class="ct">3</span></div>
+
+          <div class="card-t" data-pri="p1">
+            <div class="tt"><span class="tcode">CR-0417</span><span class="pri">P1</span></div>
+            <h5>太阳翼展开角 60° → 62°</h5>
+            <div class="desc">基于 DOE #23 · 热裕度 +5.6pp · 6 模块受影响</div>
+            <div class="agent-proposal"><b>Agent 建议通过：</b>关键路径 +0 · 已有 M2 规则支持 · 证据包 42.8 MB 就绪。</div>
+            <div class="meta"><span class="m">L3</span><span class="m">6 模块</span><span class="m">+¥48k</span></div>
+            <div class="foot"><div class="who"><span class="av human">李</span><span>待签 · 2h</span></div><span>L3 · 总师</span></div>
+          </div>
+
+          <div class="card-t" data-pri="p2">
+            <div class="tt"><span class="tcode">CR-0418</span><span class="pri">P2</span></div>
+            <h5>PCDU 固件 v1.8.2 → v1.8.3</h5>
+            <div class="desc">修复 EMC 敏感性 · 已通过 Verify 回归 #2145 (2W)</div>
+            <div class="meta"><span class="m">L2</span><span class="m">固件</span></div>
+            <div class="foot"><div class="who"><span class="av">王</span><span>王工</span></div><span>已 2 签</span></div>
+          </div>
+
+          <div class="card-t" data-pri="p2">
+            <div class="tt"><span class="tcode">PO-0118</span><span class="pri">P2</span></div>
+            <h5>采购 · 氦气管路阀 × 6</h5>
+            <div class="desc">北方精工 · ¥48,000 · 历史准时率 97%</div>
+            <div class="foot"><div class="who"><span class="av human">李</span><span>待签 · 18m</span></div><span>L2 · 金额</span></div>
+          </div>
+        </div>
+
+        <div class="col" data-state="sync">
+          <div class="col-head"><h4><span class="dot"></span>下游同步 · Propagating</h4><span class="ct">2</span></div>
+
+          <div class="card-t" data-pri="p1">
+            <div class="tt"><span class="tcode">CR-0416</span><span class="pri">P1</span></div>
+            <h5>框架主承力 · 碳纤维 T800 → T1000</h5>
+            <div class="desc">已签批 · Agent 正在下发 26 个下游制品</div>
+            <div class="agent-proposal"><b>Schedule Agent：</b>19 / 26 模块已自动更新 · 7 件待 3D 打印重新排产 · ETA 今晚</div>
+            <div class="meta"><span class="m">26 模块</span><span class="m">19 完成</span></div>
+            <div class="foot"><div class="who"><span class="av agent">F</span><span>F-34 同步中</span></div><span>73% · 4h 剩</span></div>
+          </div>
+
+          <div class="card-t" data-pri="p3">
+            <div class="tt"><span class="tcode">CR-0412</span><span class="pri">P3</span></div>
+            <h5>总装工艺 A-407 版本升级</h5>
+            <div class="desc">工艺文件自动生成 · 车间 MES 对接待确认</div>
+            <div class="foot"><div class="who"><span class="av agent">F</span><span>F-32 等待</span></div><span>MES · 1 点位</span></div>
+          </div>
+        </div>
+
+        <div class="col" data-state="done">
+          <div class="col-head"><h4><span class="dot"></span>已闭环 · Closed</h4><span class="ct">2</span></div>
+
+          <div class="card-t" data-pri="p4">
+            <div class="tt"><span class="tcode">CR-0415</span><span class="pri">P4</span></div>
+            <h5>框架材料牌号微调</h5>
+            <div class="desc">全链同步 4.3h · 回归 #2144 通过</div>
+            <div class="foot"><div class="who"><span class="av">孙</span><span>孙工</span></div><span>2d ago · 4.3h</span></div>
+          </div>
+
+          <div class="card-t" data-pri="p4">
+            <div class="tt"><span class="tcode">CR-0414</span><span class="pri">P4</span></div>
+            <h5>蓄电池容量 80 → 88 Ah</h5>
+            <div class="desc">全链 3.8h · BOM 自动更新 · 已入 M2</div>
+            <div class="foot"><div class="who"><span class="av agent">F</span><span>F-31</span></div><span>3d · 规则入库</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two column - BOM + Propagation tree -->
+      <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px">
+        <div class="bom-card">
+          <div class="bom-head">
+            <h3>
+              <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="14" height="14"/><path d="M3 8 L17 8 M3 13 L17 13 M8 3 L8 17 M13 3 L13 17"/></svg>
+              BOM Diff · CR-0417 影响项
+            </h3>
+            <div class="cr"><span>6 项差异</span><span style="color:var(--ink-ghost)">|</span><span>v12 → v13 (draft)</span></div>
+          </div>
+          <div class="bom">
+            <div class="bh">TYPE</div><div class="bh">部件</div><div class="bh">旧值 v12</div><div class="bh">新值 v13</div><div class="bh">数量</div><div class="bh">成本</div>
+
+            <div class="br">
+              <div class="bc"><span class="chg mod">MOD</span></div>
+              <div class="bc pn">太阳翼展开机构<span>P/N · SA-2003-M · 主件</span></div>
+              <div class="bc"><span class="old">angle = 60°</span><br><span class="old">lock_pin = 2</span></div>
+              <div class="bc"><span class="new">angle = 62°</span><br><span class="new">lock_pin = 3</span></div>
+              <div class="bc">× 1</div>
+              <div class="bc">¥ 0</div>
+            </div>
+
+            <div class="br">
+              <div class="bc"><span class="chg up">ADD</span></div>
+              <div class="bc pn">锁定机构 · 辅助<span>P/N · SA-2003-L1 · 新增</span></div>
+              <div class="bc"><span class="old">—</span></div>
+              <div class="bc"><span class="new">钛合金 Grade-5</span></div>
+              <div class="bc">× 1</div>
+              <div class="bc"><span class="new down">+ ¥ 8,400</span></div>
+            </div>
+
+            <div class="br">
+              <div class="bc"><span class="chg mod">MOD</span></div>
+              <div class="bc pn">热控散热面<span>P/N · TH-1104-R</span></div>
+              <div class="bc"><span class="old">OSR · 0.82m²</span></div>
+              <div class="bc"><span class="new">OSR · 0.94m²</span></div>
+              <div class="bc">× 1</div>
+              <div class="bc"><span class="new down">+ ¥ 12,600</span></div>
+            </div>
+
+            <div class="br">
+              <div class="bc"><span class="chg mod">MOD</span></div>
+              <div class="bc pn">线束 · 太阳翼供电<span>P/N · HN-3022</span></div>
+              <div class="bc"><span class="old">L = 142 cm</span></div>
+              <div class="bc"><span class="new">L = 154 cm</span></div>
+              <div class="bc">× 2</div>
+              <div class="bc"><span class="new down">+ ¥ 1,200</span></div>
+            </div>
+
+            <div class="br">
+              <div class="bc"><span class="chg mod">MOD</span></div>
+              <div class="bc pn">电源预算表<span>DOC · EPS-BUDGET · v7</span></div>
+              <div class="bc"><span class="old">supply = 3,402 W</span></div>
+              <div class="bc"><span class="new">supply = 3,420 W</span></div>
+              <div class="bc">—</div>
+              <div class="bc">—</div>
+            </div>
+
+            <div class="br">
+              <div class="bc"><span class="chg up">ADD</span></div>
+              <div class="bc pn">工艺文件 A-407<span>新版 · PRC-A407-v4</span></div>
+              <div class="bc"><span class="old">—</span></div>
+              <div class="bc"><span class="new">2 张工序卡新增</span></div>
+              <div class="bc">—</div>
+              <div class="bc">—</div>
+            </div>
+
+            <div class="br">
+              <div class="bc" style="font-weight:500">Σ</div>
+              <div class="bc pn" style="color:var(--ink)">合计 · 本变更额外成本</div>
+              <div class="bc">—</div>
+              <div class="bc">—</div>
+              <div class="bc">—</div>
+              <div class="bc"><span class="new down" style="font-weight:500;font-size:13px">+ ¥ 22,200</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Propagation tree -->
+        <div class="bom-card">
+          <div class="bom-head">
+            <h3>
+              <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="4" r="2"/><circle cx="4" cy="15" r="2"/><circle cx="10" cy="15" r="2"/><circle cx="16" cy="15" r="2"/><path d="M10 6 L10 9 L4 13 M10 9 L10 13 M10 9 L16 13"/></svg>
+              传导图谱 · 从根变更开枝
+            </h3>
+            <div class="cr"><span>3 级 · 6 节点</span></div>
+          </div>
+          <div class="prop">
+            <div class="prop-title"><span>ROOT · CR-0417</span><span>6 / 6 已识别</span></div>
+            <div class="prop-root">
+              <div class="prop-chip">
+                <span class="t">CR</span>
+                <span>太阳翼 60° → 62°</span>
+              </div>
+            </div>
+            <div class="prop-branches">
+              <div class="prop-branch">
+                <h6>结构域 · 2</h6>
+                <div class="b-list">
+                  <span class="chg">锁定机构 +1</span>
+                  <span>支架孔位</span>
+                  <span class="auto">工艺 A-407 自动</span>
+                </div>
+              </div>
+              <div class="prop-branch">
+                <h6>热控域 · 1</h6>
+                <div class="b-list">
+                  <span class="chg">散热面 0.82→0.94m²</span>
+                  <span class="auto">Verify 回归 · 自动</span>
+                </div>
+              </div>
+              <div class="prop-branch">
+                <h6>电气域 · 3</h6>
+                <div class="b-list">
+                  <span class="chg">线束 +12cm × 2</span>
+                  <span>电源预算</span>
+                  <span class="auto">供电分配表</span>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:18px;padding:10px 12px;background:var(--paper-1);border-left:2px solid var(--teal);border-radius:0 3px 3px 0;font-family:var(--mono);font-size:11px;line-height:1.55;color:var(--ink-2)">
+              <b style="font-family:var(--sans);color:var(--teal);font-weight:500">BOM Agent：</b>基于组织记忆 M2，<b style="font-family:var(--sans);font-weight:500">此类变更历史平均 7 个节点 · 本次 6 个</b> · 图谱完整度 98%。<a href="#" style="color:var(--teal)">→ 查看 TLA 完整图谱</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Critical path timeline -->
+      <div class="timeline">
+        <div class="bom-head">
+          <h3>
+            <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10 L17 10 M3 6 L17 6 M3 14 L17 14"/><circle cx="6" cy="6" r="1" fill="currentColor"/><circle cx="10" cy="10" r="1" fill="currentColor"/><circle cx="14" cy="14" r="1" fill="currentColor"/></svg>
+            关键路径 · 6 周视图
+          </h3>
+          <div class="cr"><span>红线为关键链</span><span style="color:var(--ink-ghost)">|</span><span>NOW · 2026-04-17</span></div>
+        </div>
+        <div class="tl-body">
+          <div class="tl-grid">
+            <div class="tl-hd">模块 / 周</div>
+            <div class="tl-hd">W15</div><div class="tl-hd">W16</div><div class="tl-hd">W17 · NOW</div><div class="tl-hd">W18 · CDR</div><div class="tl-hd">W19</div><div class="tl-hd">W20 · AIT</div><div class="tl-hd">W21</div><div class="tl-hd">W22</div>
+
+            <div class="tl-row">
+              <div class="tl-label"><b>Design · 总体</b><span>设计收敛</span></div>
+              <div class="tl-cell"><div class="tl-bar d" style="left:4px;width:calc(100% - 4px)">设计</div></div>
+              <div class="tl-cell"><div class="tl-bar d" style="left:0;width:calc(100% + 1px)">总体 v13</div></div>
+              <div class="tl-cell"><div class="tl-bar d" style="left:0;width:60%">CDR 准备</div></div>
+              <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+            </div>
+
+            <div class="tl-row">
+              <div class="tl-label"><b>Verify · 热控</b><span>全套 216 项</span></div>
+              <div class="tl-cell"></div>
+              <div class="tl-cell"><div class="tl-bar v" style="left:20%;width:80%">准备</div></div>
+              <div class="tl-cell"><div class="tl-bar v crit" style="left:0;width:calc(100% + 1px)">执行 · 77%</div></div>
+              <div class="tl-cell"><div class="tl-bar v" style="left:0;width:40%">证书</div></div>
+              <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+            </div>
+
+            <div class="tl-row">
+              <div class="tl-label"><b>Flow · 变更</b><span>CR-0417 同步</span></div>
+              <div class="tl-cell"></div>
+              <div class="tl-cell"></div>
+              <div class="tl-cell"><div class="tl-bar f crit" style="left:30%;width:70%">同步 · 待签</div></div>
+              <div class="tl-cell"><div class="tl-bar f" style="left:0;width:40%">闭环</div></div>
+              <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+            </div>
+
+            <div class="tl-row">
+              <div class="tl-label"><b>采购 · 锁定件</b><span>PO-0118 氦气阀</span></div>
+              <div class="tl-cell"></div>
+              <div class="tl-cell"></div>
+              <div class="tl-cell"><div class="tl-bar p" style="left:10%;width:80%">采购</div></div>
+              <div class="tl-cell"><div class="tl-bar p" style="left:0;width:calc(100% + 1px)">到货</div></div>
+              <div class="tl-cell"><div class="tl-bar p" style="left:0;width:30%">入库</div></div>
+              <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+            </div>
+
+            <div class="tl-row">
+              <div class="tl-label"><b>装配 · AIT</b><span>总装启动</span></div>
+              <div class="tl-cell"></div><div class="tl-cell"></div><div class="tl-cell"></div>
+              <div class="tl-cell"><div class="tl-bar o" style="left:50%;width:50%">进厂</div></div>
+              <div class="tl-cell"><div class="tl-bar o" style="left:0;width:calc(100% + 1px)">总装 Phase 1</div></div>
+              <div class="tl-cell"><div class="tl-bar o crit" style="left:0;width:calc(100% + 1px)">Phase 2</div></div>
+              <div class="tl-cell"><div class="tl-bar o" style="left:0;width:calc(100% + 1px)">Phase 3</div></div>
+              <div class="tl-cell"><div class="tl-bar o" style="left:0;width:60%">环境</div></div>
+            </div>
+
+            <div class="tl-now" style="left:calc(180px + (100% - 180px) * 2.4 / 8)"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom: Harness + Suppliers -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px">
+        <div class="side-card">
+          <div class="sc-head">
+            <h4>Harness · 审批链 · 待完成</h4>
+            <span class="c">3 项</span>
+          </div>
+
+          <div class="aprow">
+            <div class="ap-top"><b>CR-0417 太阳翼展开角 60°→62°</b><span class="lv l3">L3</span></div>
+            <div class="ap-steps">
+              <div class="ap-step done"><span class="dot done"></span><span>影响分析</span></div><div class="line"></div>
+              <div class="ap-step done"><span class="dot done"></span><span>副总师</span></div><div class="line"></div>
+              <div class="ap-step cur"><span class="dot cur"></span><span>总师 L3</span></div><div class="line"></div>
+              <div class="ap-step"><span class="dot"></span><span>闭环</span></div>
+            </div>
+            <div class="ap-meta">提出 2h · 副总师 48m 前已通过 · 等待李承泽 · 预计影响 +¥22.2K, +0 天</div>
+          </div>
+
+          <div class="aprow">
+            <div class="ap-top"><b>PO-0118 氦气阀采购 ¥48K</b><span class="lv l2">L2</span></div>
+            <div class="ap-steps">
+              <div class="ap-step done"><span class="dot done"></span><span>对比</span></div><div class="line"></div>
+              <div class="ap-step done"><span class="dot done"></span><span>商务初审</span></div><div class="line"></div>
+              <div class="ap-step cur"><span class="dot cur"></span><span>金额 L2</span></div><div class="line"></div>
+              <div class="ap-step"><span class="dot"></span><span>下单</span></div>
+            </div>
+            <div class="ap-meta">北方精工 · 准时率 97% · 3 周交付</div>
+          </div>
+
+          <div class="aprow">
+            <div class="ap-top"><b>CR-0418 PCDU 固件 v1.8.3</b><span class="lv l2">L2</span></div>
+            <div class="ap-steps">
+              <div class="ap-step done"><span class="dot done"></span><span>回归</span></div><div class="line"></div>
+              <div class="ap-step done"><span class="dot done"></span><span>Verify</span></div><div class="line"></div>
+              <div class="ap-step done"><span class="dot done"></span><span>电源责任人</span></div><div class="line"></div>
+              <div class="ap-step cur"><span class="dot cur"></span><span>发布</span></div>
+            </div>
+            <div class="ap-meta">全部签完 · 等待 Flow Agent 自动发布到 4 颗 EM 件</div>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <div class="sc-head">
+            <h4>供应商看板 · CR 影响相关</h4>
+            <span class="c">5 家</span>
+          </div>
+
+          <div class="sup">
+            <div class="s-bar"></div>
+            <div class="s-text"><b>北方精工 · 氦气阀</b><span>PO-0118 · 准时率 97% · ¥48K</span></div>
+            <div class="s-v"><div class="vn">3 周</div><div class="vs">nominal</div></div>
+          </div>
+
+          <div class="sup">
+            <div class="s-bar"></div>
+            <div class="s-text"><b>思成金属 · 钛合金锁销</b><span>CR-0417 衍生件 · 新增订单 ¥8.4K</span></div>
+            <div class="s-v"><div class="vn">2 周</div><div class="vs">库存充足</div></div>
+          </div>
+
+          <div class="sup warn">
+            <div class="s-bar"></div>
+            <div class="s-text"><b>星元散热 · OSR 板</b><span>重新开模 · 热控散热面 0.94m²</span></div>
+            <div class="s-v"><div class="vn">3.5 周</div><div class="vs">边界</div></div>
+          </div>
+
+          <div class="sup late">
+            <div class="s-bar"></div>
+            <div class="s-text"><b>恒动精仪 · 动量轮</b><span>PO-0095 · 关联问题 RCA 进行中</span></div>
+            <div class="s-v"><div class="vn">延 4 天</div><div class="vs">行动</div></div>
+          </div>
+
+          <div class="sup">
+            <div class="s-bar"></div>
+            <div class="s-text"><b>华测线缆 · 供电线束</b><span>CR-0417 衍生 · L+12cm × 2 条</span></div>
+            <div class="s-v"><div class="vn">5 天</div><div class="vs">库存出</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

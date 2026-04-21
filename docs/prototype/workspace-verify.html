@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3studio · Verify 工作空间 · XX-3 号卫星</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,400&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"></noscript>
+<link rel="stylesheet" href="assets/3studio.css">
+<style>
+.app{display:grid;grid-template-columns:64px 260px 1fr;min-height:100vh}
+@media (max-width:1100px){.app{grid-template-columns:64px 1fr}.plist{display:none}}
+@media (max-width:760px){.app{grid-template-columns:1fr}.rail{display:none}}
+
+/* Rail */
+.rail{border-right:1px solid var(--line);background:var(--paper-elev);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;position:sticky;top:0;height:100vh}
+.rail .logo{width:32px;height:32px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--ink)}
+.rail a{width:40px;height:40px;border-radius:var(--r-s);display:flex;align-items:center;justify-content:center;color:var(--ink-mute);transition:all .15s;position:relative}
+.rail a svg{width:20px;height:20px}
+.rail a:hover{background:var(--paper-2);color:var(--ink)}
+.rail a.active{background:var(--ink);color:var(--paper)}
+.rail a .tip{position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 8px;border-radius:2px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:100}
+.rail a:hover .tip{opacity:1}
+.rail .spacer{flex:1}
+.rail .ru{width:32px;height:32px;border-radius:50%;background:var(--grass);color:var(--paper-ink);font-family:var(--serif);font-style:italic;font-weight:500;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:6px}
+
+/* Panel list */
+.plist{border-right:1px solid var(--line);background:var(--paper);padding:18px 0;height:100vh;overflow-y:auto;position:sticky;top:0}
+.pl-head{padding:0 18px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.pl-head .kicker{margin-bottom:6px;font-size:9.5px}
+.pl-head h3{margin:0;font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-0.01em}
+.pl-head h3 em{font-style:italic;color:var(--grass);font-weight:400}
+.pl-head .proj{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--ink-mute)}
+
+.pl-sec{padding:14px 18px 6px 18px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-mute);display:flex;justify-content:space-between;font-weight:500}
+.pl-item{padding:8px 18px 8px 22px;display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent}
+.pl-item:hover{background:var(--paper-1)}
+.pl-item.active{background:var(--paper-2);border-left-color:var(--grass);color:var(--ink);font-weight:500}
+.pl-item .pd{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:var(--grass)}
+.pl-item .pd.run{background:var(--teal);box-shadow:0 0 0 2px var(--teal-soft)}
+.pl-item .pd.fail{background:var(--rust)}
+.pl-item .pd.wait{background:var(--ochre)}
+.pl-item .pn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-item .pm{font-family:var(--mono);font-size:9.5px;color:var(--ink-mute);letter-spacing:0.08em}
+
+/* Main */
+.main{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{border-bottom:1px solid var(--line);padding:14px 26px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:var(--paper-elev);flex-shrink:0}
+.crumbs{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase}
+.crumbs .sep{color:var(--ink-ghost)}
+.crumbs b{color:var(--ink);font-weight:500}
+.topbar-right{display:flex;gap:14px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;color:var(--ink-mute);text-transform:uppercase}
+.grass-dot{width:6px;height:6px;border-radius:50%;background:var(--grass);box-shadow:0 0 0 0 var(--grass);animation:pulse-grass 1.8s infinite}
+@keyframes pulse-grass{0%{box-shadow:0 0 0 0 oklch(0.58 0.13 140 / 0.5)}70%{box-shadow:0 0 0 8px oklch(0.58 0.13 140 / 0)}100%{box-shadow:0 0 0 0 oklch(0.58 0.13 140 / 0)}}
+
+.body{flex:1;overflow-y:auto;padding:24px 30px 60px}
+
+/* Hero row — Gate */
+.gate{display:grid;grid-template-columns:auto 1fr auto;gap:28px;padding:26px 28px;border:1px solid var(--line-2);border-radius:var(--r-m);background:linear-gradient(135deg, var(--paper-elev) 0%, color-mix(in oklch, var(--grass) 6%, var(--paper-elev)) 100%);margin-bottom:26px;align-items:center;position:relative;overflow:hidden}
+.gate::before{content:"";position:absolute;top:-40px;right:-30px;width:200px;height:200px;border:1px solid var(--grass);border-radius:50%;opacity:0.25}
+.gate::after{content:"";position:absolute;top:-20px;right:-10px;width:160px;height:160px;border:1px solid var(--grass);border-radius:50%;opacity:0.15}
+.gate-ring{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gate-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.gate-ring .bg{fill:none;stroke:var(--line-2);stroke-width:8}
+.gate-ring .fg{fill:none;stroke:var(--grass);stroke-width:8;stroke-linecap:round;stroke-dasharray:339.3;stroke-dashoffset:calc(339.3 * (1 - 0.778))}
+.gate-ring .num{font-family:var(--serif);font-weight:350;font-size:32px;letter-spacing:-0.02em;line-height:1;z-index:1;position:relative}
+.gate-ring .num em{font-style:italic;color:var(--grass);font-weight:400}
+.gate-ring .pct{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.1em;position:absolute;bottom:20px}
+
+.gate-info h1{margin:0 0 6px;font-family:var(--serif);font-size:28px;font-weight:500;letter-spacing:-0.018em;line-height:1.15}
+.gate-info h1 em{font-style:italic;color:var(--grass);font-weight:400}
+.gate-info .gs{font-size:13.5px;color:var(--ink-dim);margin-bottom:12px;max-width:58ch}
+.gate-info .gm{display:flex;gap:6px;flex-wrap:wrap}
+
+.gate-cta{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.gate-state{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--grass);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.gate-cta .cbtn{display:flex;gap:8px}
+
+/* Stat row */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);margin-bottom:26px;overflow:hidden}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stats .sc{padding:16px 20px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.stats .sc:last-child{border-right:0}
+.stats .sc .sl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;color:var(--ink-mute);text-transform:uppercase}
+.stats .sc .sv{font-family:var(--serif);font-weight:350;font-size:28px;letter-spacing:-0.015em;line-height:1.05}
+.stats .sc .sv em{font-style:italic;font-weight:400}
+.stats .sc .sv.ok em{color:var(--grass)}
+.stats .sc .sv.wrn em{color:var(--ochre)}
+.stats .sc .sv.bad em{color:var(--rust)}
+.stats .sc .st{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.06em}
+
+/* Two column */
+.wb{display:grid;grid-template-columns:1fr 380px;gap:24px}
+@media (max-width:1200px){.wb{grid-template-columns:1fr}}
+
+.card{border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);overflow:hidden;margin-bottom:20px}
+.card-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--paper-elev);gap:12px;flex-wrap:wrap}
+.card-head h3{margin:0;font-family:var(--serif);font-size:16px;font-weight:500;display:flex;align-items:center;gap:10px}
+.card-head h3 .glyph{width:20px;height:20px;color:var(--grass)}
+.card-head .cr{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;color:var(--ink-mute);text-transform:uppercase;display:flex;gap:10px;align-items:center}
+
+/* Test matrix - heatmap */
+.mx{padding:18px 20px}
+.mx-legend{display:flex;gap:14px;margin-bottom:14px;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;color:var(--ink-mute);align-items:center}
+.mx-legend .lgc{display:flex;align-items:center;gap:6px}
+.mx-legend .lgc .sq{width:12px;height:12px;border:1px solid var(--line-2);border-radius:2px}
+
+.mx-grid{display:grid;grid-template-columns:140px repeat(12,1fr);gap:2px;font-family:var(--mono);font-size:10.5px}
+.mx-grid .mh{padding:6px 4px;color:var(--ink-mute);letter-spacing:0.08em;text-transform:uppercase;font-size:9.5px;text-align:center;font-weight:500}
+.mx-grid .ml{padding:8px 10px;color:var(--ink-2);background:var(--paper-1);border-radius:2px;font-size:12px;display:flex;justify-content:space-between;align-items:center}
+.mx-grid .ml .lc{color:var(--ink-mute);font-size:9.5px}
+.mx-grid .mc{height:30px;border-radius:2px;position:relative;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;transition:all .15s}
+.mx-grid .mc:hover{color:var(--paper);transform:scale(1.06)}
+.mx-grid .mc.pass{background:var(--grass);opacity:0.85}
+.mx-grid .mc.pass:hover{opacity:1}
+.mx-grid .mc.run{background:var(--teal);opacity:0.7;animation:mxpulse 1.5s infinite}
+@keyframes mxpulse{50%{opacity:1}}
+.mx-grid .mc.wait{background:var(--paper-2);border:1px solid var(--line-2)}
+.mx-grid .mc.wait:hover{color:var(--ink)}
+.mx-grid .mc.fail{background:var(--rust)}
+.mx-grid .mc.wrn{background:var(--ochre)}
+.mx-grid .mc.skip{background:repeating-linear-gradient(45deg,var(--paper-2),var(--paper-2) 3px,var(--line) 3px,var(--line) 4px)}
+
+/* Bug list */
+.bug{padding:12px 18px;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:flex-start}
+.bug:last-child{border-bottom:0}
+.bug .bi{width:26px;height:26px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;color:var(--paper-ink);font-weight:500}
+.bug .bi.f{background:var(--rust)}
+.bug .bi.w{background:var(--ochre);color:var(--ink)}
+.bug .bi.p{background:var(--grass)}
+.bug .bt b{font-weight:500;font-size:13.5px;display:block}
+.bug .bt .bs{display:block;margin-top:3px;font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:0.04em;line-height:1.5}
+.bug .bt .bt-rca{margin-top:6px;padding:8px 10px;background:var(--paper-1);border-left:2px solid var(--line-2);border-radius:0 3px 3px 0;font-family:var(--mono);font-size:10.5px;line-height:1.6;color:var(--ink-2)}
+.bug .bt .bt-rca b{font-family:var(--sans);letter-spacing:0;font-weight:500;color:var(--grass)}
+.bug .br{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.06em;white-space:nowrap}
+
+/* Coverage bar */
+.cov-item{padding:12px 18px;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:1fr auto;gap:6px}
+.cov-item:last-child{border-bottom:0}
+.cov-item .cov-top{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}
+.cov-item .cov-top b{font-weight:500}
+.cov-item .cov-top .pct{font-family:var(--mono);font-size:11px;letter-spacing:0.06em}
+.cov-item .cov-bar{grid-column:1/-1;height:5px;background:var(--paper-2);border-radius:3px;overflow:hidden;position:relative}
+.cov-item .cov-bar .fill{height:100%;border-radius:3px}
+.cov-item .cov-bar .mk{position:absolute;top:-2px;width:1px;height:9px;background:var(--ink-ghost);left:90%}
+
+/* World model diagram */
+.wmodel{padding:18px 20px;display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:center;font-family:var(--mono);font-size:11px}
+.wm-col{display:flex;flex-direction:column;gap:8px}
+.wm-box{padding:10px 12px;border:1px solid var(--line-2);border-radius:3px;background:var(--paper-1);position:relative}
+.wm-box .wb-l{font-size:9px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase;margin-bottom:4px}
+.wm-box .wb-v{font-size:13px;color:var(--ink);font-weight:500}
+.wm-box .wb-unit{color:var(--ink-mute);font-size:10px}
+.wm-box.diff{background:var(--grass-soft);border-color:color-mix(in oklch, var(--grass) 40%, transparent)}
+.wm-box.diff .wb-v{color:var(--grass)}
+.wm-box.bad{background:var(--rust-soft);border-color:color-mix(in oklch, var(--rust) 40%, transparent)}
+.wm-box.bad .wb-v{color:var(--rust)}
+.wm-arrow{padding:0 18px;display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--ink-mute)}
+.wm-arrow svg{width:28px;height:28px}
+.wm-title{text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px dashed var(--line)}
+
+/* Right: evidence + reg tests */
+.side-card-head h3{font-size:15px}
+
+/* Certificate preview */
+.cert{position:relative;padding:24px 22px;background:var(--paper-elev);border-bottom:1px solid var(--line)}
+.cert::before{content:"";position:absolute;inset:8px;border:1px solid var(--line-2);pointer-events:none}
+.cert-head{text-align:center;font-family:var(--serif);letter-spacing:-0.01em}
+.cert-head .small{font-family:var(--mono);font-size:9px;letter-spacing:0.22em;color:var(--ink-mute);text-transform:uppercase}
+.cert-head h4{margin:6px 0 4px;font-size:17px;font-weight:500;font-style:italic}
+.cert-head .sub{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.08em}
+.cert-rows{display:flex;flex-direction:column;margin-top:14px;gap:0}
+.cert-rows .cr-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px dashed var(--line);font-family:var(--mono);font-size:11px}
+.cert-rows .cr-row:last-child{border-bottom:0}
+.cert-rows .cr-row .k{color:var(--ink-mute);letter-spacing:0.06em}
+.cert-rows .cr-row .v{color:var(--ink)}
+.cert-seal{margin-top:14px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:9.5px;letter-spacing:0.08em;color:var(--ink-mute)}
+.cert-seal .stamp{width:52px;height:52px;border:2px solid var(--grass);border-radius:50%;color:var(--grass);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-style:italic;font-weight:500;font-size:14px;transform:rotate(-8deg)}
+
+/* Regression timeline */
+.reg{padding:0}
+.reg-row{display:grid;grid-template-columns:60px 1fr auto;gap:10px;padding:11px 18px;border-bottom:1px dashed var(--line);align-items:center;font-size:13px}
+.reg-row:last-child{border-bottom:0}
+.reg-row .rt{font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:0.06em}
+.reg-row .rn b{font-weight:500;display:block}
+.reg-row .rn span{display:block;font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.04em;margin-top:2px}
+.reg-row .rv{font-family:var(--mono);font-size:10px;letter-spacing:0.08em;padding:3px 7px;border-radius:2px;white-space:nowrap;font-weight:500}
+.reg-row .rv.pass{background:var(--grass-soft);color:var(--grass)}
+.reg-row .rv.fail{background:var(--rust-soft);color:var(--rust)}
+.reg-row .rv.run{background:var(--teal-soft);color:var(--teal)}
+.reg-row .rv.hold{background:var(--ochre-soft);color:oklch(0.5 0.14 78)}
+
+/* Trust ledger */
+.trust{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.trust-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:9px 10px;background:var(--paper-1);border-radius:3px;align-items:center;border-left:2px solid var(--grass)}
+.trust-row .tt-ic{width:24px;height:24px;border-radius:3px;background:var(--ink);color:var(--teal-2);font-family:var(--mono);font-size:9px;letter-spacing:0.04em;display:flex;align-items:center;justify-content:center;font-weight:500}
+.trust-row .tt-tx{font-size:12px;line-height:1.4;color:var(--ink-2)}
+.trust-row .tt-tx b{font-weight:500}
+.trust-row .tt-h{font-family:var(--mono);font-size:9px;color:var(--teal);letter-spacing:0.04em}
+
+/* Pipeline chain */
+.chain{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--line);margin-top:26px}
+.chain-cell{padding:16px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;cursor:pointer;transition:background .15s}
+.chain-cell:last-child{border-right:0}
+.chain-cell:hover{background:var(--paper-elev)}
+.chain-cell .ci{font-family:var(--mono);font-size:9px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+.chain-cell .ci .arr{color:var(--ink-ghost)}
+.chain-cell h5{margin:0;font-family:var(--serif);font-size:15px;font-weight:500;letter-spacing:-0.005em}
+.chain-cell h5 em{font-style:italic;font-weight:400}
+.chain-cell .cd{font-family:var(--mono);font-size:10.5px;color:var(--ink-mute);letter-spacing:0.04em;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- Rail -->
+  <aside class="rail">
+    <a href="index.html" class="logo" aria-label="home">
+      <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7 L14 3 L24 7 L14 11 Z" fill="currentColor" fill-opacity="0.08"/><path d="M4 14 L14 10 L24 14 L14 18 Z"/><path d="M4 21 L14 17 L24 21 L14 25 Z"/></svg>
+    </a>
+    <a href="app.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="5" height="5"/><rect x="10.5" y="2.5" width="5" height="5"/><rect x="2.5" y="10.5" width="5" height="5"/><rect x="10.5" y="10.5" width="5" height="5"/></svg><span class="tip">工作台</span></a>
+    <a href="workspace.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 15 L9 3 L15 15"/><path d="M6 11 L12 11"/></svg><span class="tip">Design</span></a>
+    <a href="workspace-verify.html" class="active"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="12" height="12"/><path d="M6 9 L8.5 11.5 L13 7"/></svg><span class="tip">Verify</span></a>
+    <a href="workspace-flow.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="9" r="5"/><path d="M9 4 L11 6 L9 8"/><path d="M9 14 L7 12 L9 10"/></svg><span class="tip">Flow</span></a>
+    <a href="workspace-operate.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 14 L7 7 L10 11 L16 4"/><circle cx="16" cy="4" r="1.2" fill="currentColor"/></svg><span class="tip">Operate</span></a>
+    <a href="workspace-command.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 15 L3 9 L6 9 L6 15"/><path d="M8 15 L8 5 L11 5 L11 15"/><path d="M13 15 L13 11 L16 11 L16 15"/></svg><span class="tip">Command</span></a>
+    <div class="spacer"></div>
+    <a href="#"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3 L9 15 M3 9 L15 9"/></svg><span class="tip">知识库</span></a>
+    <a href="#"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="9" r="6"/><path d="M9 5 L9 9 L12 11"/></svg><span class="tip">设置</span></a>
+    <div class="ru">李</div>
+  </aside>
+
+  <!-- Panel list -->
+  <aside class="plist">
+    <div class="pl-head">
+      <div class="kicker">Space S-02</div>
+      <h3><em>Verify</em> 工作空间</h3>
+      <div class="proj"><span>XX-3 号卫星</span><span style="color:var(--ink);font-weight:500">PRJ-0217</span></div>
+    </div>
+
+    <div class="pl-sec"><span>测试套件</span><span>6</span></div>
+    <div class="pl-item active"><span class="pd run"></span><span class="pn">热控验证 · 全</span><span class="pm">168/216</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">结构静力 · 全</span><span class="pm">142/142</span></div>
+    <div class="pl-item"><span class="pd run"></span><span class="pn">AOCS HIL 半实物</span><span class="pm">58/96</span></div>
+    <div class="pl-item"><span class="pd fail"></span><span class="pn">电源 EMC 敏感性</span><span class="pm">41/48</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">推进器点火包络</span><span class="pm">0/72</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">通信链路误码率</span><span class="pm">96/96</span></div>
+
+    <div class="pl-sec"><span>Gate 审核</span><span>3</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">PDR → CDR Gate</span><span class="pm">L3</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">热控边界放行</span><span class="pm">L2</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">AIT 启动许可</span><span class="pm">L3</span></div>
+
+    <div class="pl-sec"><span>最近 Bug</span><span>12</span></div>
+    <div class="pl-item"><span class="pd fail"></span><span class="pn">BUG-0417 极端高温余量</span><span class="pm">P1</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">BUG-0413 陀螺漂移</span><span class="pm">P2</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">BUG-0408 已修复</span><span class="pm">fix</span></div>
+
+    <div class="pl-sec"><span>Verify Agent</span><span>3</span></div>
+    <div class="pl-item"><span class="pd run"></span><span class="pn">Matrix Agent · V-21</span><span class="pm">Busy</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">RCA Agent · V-22</span><span class="pm">Idle</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">Regression Agent · V-23</span><span class="pm">Idle</span></div>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="topbar">
+      <div class="crumbs">
+        <span>3studio</span><span class="sep">/</span>
+        <span>轨道辰光</span><span class="sep">/</span>
+        <span>Verify · S-02</span><span class="sep">/</span>
+        <b>热控验证 · 全矩阵</b>
+      </div>
+      <div class="topbar-right">
+        <span class="grass-dot"></span>
+        <span>168 / 216 · 77.8% · 1 Fail · 2 Warn</span>
+        <span style="color:var(--ink-ghost)">|</span>
+        <span>证据链 · SHA256 归档</span>
+      </div>
+    </div>
+
+    <div class="body">
+      <!-- Gate hero -->
+      <div class="gate">
+        <div class="gate-ring">
+          <svg viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" cx="60" cy="60" r="54"/></svg>
+          <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center"><span class="num"><em>77.8</em>%</span><span class="pct">通过率</span></div>
+        </div>
+        <div class="gate-info">
+          <div class="kicker" style="margin-bottom:6px;color:var(--grass)">PDR → CDR · GATE G-03</div>
+          <h1>关键设计评审 <em>Gate</em> · 距放行 48 项</h1>
+          <p class="gs">216 项测试矩阵完成 168 项。当前 1 项 P1 问题（极端高温余量 &lt; 8%）已触发 RCA Agent 归因中；2 项 P2 警告；其余自动签字入档。</p>
+          <div class="gm">
+            <span class="chip chip-grass"><span class="dot" style="background:var(--grass)"></span>142 静力 · 全通过</span>
+            <span class="chip chip-grass">96 通信 · 全通过</span>
+            <span class="chip chip-rust">1 Fail · 热控高温</span>
+            <span class="chip chip-ochre">2 Warn · EMC 敏感</span>
+            <span class="chip">ETA · 今晚 20:30</span>
+          </div>
+        </div>
+        <div class="gate-cta">
+          <div class="gate-state"><span class="grass-dot"></span>NOMINAL · 可继续</div>
+          <div class="cbtn">
+            <button class="btn btn-ghost btn-sm">导出证据包</button>
+            <button class="btn btn-teal btn-sm" style="background:var(--grass);border-color:var(--grass)">Gate 审查 →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="sc"><span class="sl">总进度</span><span class="sv"><em>77.8</em>%</span><span class="st">↑ 5.2pp / 24h</span></div>
+        <div class="sc"><span class="sl">通过 / 总</span><span class="sv ok"><em>165</em>/168</span><span class="st">自动签字</span></div>
+        <div class="sc"><span class="sl">失败 · P1</span><span class="sv bad"><em>1</em></span><span class="st">RCA 归因中</span></div>
+        <div class="sc"><span class="sl">警告 · P2</span><span class="sv wrn"><em>2</em></span><span class="st">可条件放行</span></div>
+        <div class="sc"><span class="sl">Design 差距</span><span class="sv"><em>Δ</em>0.8%</span><span class="st">设计 / 实测 差异</span></div>
+      </div>
+
+      <!-- Two column -->
+      <div class="wb">
+        <div>
+          <!-- Matrix -->
+          <div class="card">
+            <div class="card-head">
+              <h3>
+                <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="16" height="16"/><path d="M2 6 L18 6 M2 10 L18 10 M2 14 L18 14 M6 2 L6 18 M10 2 L10 18 M14 2 L14 18"/></svg>
+                测试矩阵 · 热控全套 12×18
+              </h3>
+              <div class="cr">
+                <span>216 项 · 并行 24 通道</span>
+                <span style="color:var(--ink-ghost)">|</span>
+                <span>点击格子查看用例</span>
+              </div>
+            </div>
+            <div class="mx">
+              <div class="mx-legend">
+                <div class="lgc"><span class="sq" style="background:var(--grass)"></span>Pass</div>
+                <div class="lgc"><span class="sq" style="background:var(--teal)"></span>Running</div>
+                <div class="lgc"><span class="sq" style="background:var(--rust)"></span>Fail</div>
+                <div class="lgc"><span class="sq" style="background:var(--ochre)"></span>Warn</div>
+                <div class="lgc"><span class="sq" style="background:var(--paper-2);border:1px solid var(--line-2)"></span>Queued</div>
+                <div class="lgc"><span class="sq" style="background:repeating-linear-gradient(45deg,var(--paper-2),var(--paper-2) 3px,var(--line) 3px,var(--line) 4px)"></span>Skipped</div>
+              </div>
+
+              <div class="mx-grid">
+                <div class="mh"></div>
+                <div class="mh">T-60</div><div class="mh">T-40</div><div class="mh">T-20</div><div class="mh">0</div><div class="mh">+20</div><div class="mh">+40</div><div class="mh">+60</div><div class="mh">+80</div><div class="mh">+100</div><div class="mh">+120</div><div class="mh">+140</div><div class="mh">+160</div>
+
+                <div class="ml">SAR 载荷<span class="lc">Payload</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div>
+
+                <div class="ml">蓄电池组<span class="lc">Battery</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc wrn">!</div><div class="mc wrn">!</div>
+
+                <div class="ml">控制计算机<span class="lc">OBC</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div>
+
+                <div class="ml">星敏感器<span class="lc">Star Tracker</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc run">R</div><div class="mc run">R</div>
+
+                <div class="ml">动量轮<span class="lc">Reaction Wheel</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc run">R</div><div class="mc wait"></div><div class="mc wait"></div>
+
+                <div class="ml">太阳翼<span class="lc">Solar Array</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc fail">✗</div>
+
+                <div class="ml">散热面<span class="lc">Radiator</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc run">R</div><div class="mc wait"></div><div class="mc wait"></div>
+
+                <div class="ml">电源变换器<span class="lc">PCDU</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc run">R</div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div>
+
+                <div class="ml">结构主框<span class="lc">Structure</span></div>
+                <div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc pass">✓</div><div class="mc skip"></div><div class="mc skip"></div>
+
+                <div class="ml">推进模块<span class="lc">Propulsion</span></div>
+                <div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div><div class="mc wait"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bugs / RCA -->
+          <div class="card">
+            <div class="card-head">
+              <h3>
+                <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="color:var(--rust)"><circle cx="10" cy="10" r="7"/><path d="M10 6 L10 11"/><circle cx="10" cy="13.5" r="0.7" fill="currentColor"/></svg>
+                未关闭的缺陷 · RCA Agent 归因中
+              </h3>
+              <div class="cr"><span>1 P1 · 2 P2</span></div>
+            </div>
+
+            <div class="bug">
+              <div class="bi f">P1</div>
+              <div class="bt">
+                <b>BUG-0417 · 极端高温 +160°C 工况 · 太阳翼热控余量不足</b>
+                <span class="bs">Case#207 / Solar Array @ T+160 · 实测余量 7.8% vs 阈值 15% · 差距 7.2pp</span>
+                <div class="bt-rca">
+                  <b>RCA Agent 推断：</b>太阳翼板厚 8.2mm（下限）+ 展开角 72° → 热辐射面减小 12%，触发余量失守。<br>
+                  <b>关联记忆：</b>M2 · "板厚 &lt; 9mm + 角度 &gt; 70° 100% 失败" → <b>应已剪枝</b>，但本用例由 DoE v1（旧矩阵）残留。<br>
+                  <b>修复建议：</b>将构型 #23 (62°/10.5mm) 作为基线 · 重跑该格 · 预计通过率 &gt; 95%
+                </div>
+              </div>
+              <div class="br">25 min<br>V-22</div>
+            </div>
+
+            <div class="bug">
+              <div class="bi w">P2</div>
+              <div class="bt">
+                <b>BUG-0418 · 蓄电池组 +140/+160°C 电压跌落 12%</b>
+                <span class="bs">Case#131,132 / Battery · 实测电压 26.4 V vs 标称 27.0 V · 温升斜率正常</span>
+              </div>
+              <div class="br">1h</div>
+            </div>
+
+            <div class="bug">
+              <div class="bi p">P0</div>
+              <div class="bt">
+                <b>BUG-0408 · 陀螺漂移超限 · 已修复</b>
+                <span class="bs">Case#89 / Star Tracker @ T-40 · 修复版本 v2.1.4 已通过回归</span>
+              </div>
+              <div class="br">2d · fix</div>
+            </div>
+          </div>
+
+          <!-- World model diff -->
+          <div class="card">
+            <div class="card-head">
+              <h3>
+                <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10 L10 3 L17 10 L10 17 Z"/><path d="M10 6 L10 14"/><circle cx="10" cy="10" r="1.5" fill="currentColor"/></svg>
+                世界模型 · Design ↔ Verify 校准
+              </h3>
+              <div class="cr"><span>差异 Δ 0.8% · nominal</span></div>
+            </div>
+            <div class="wmodel">
+              <div class="wm-col">
+                <div class="wm-title">Design 预测</div>
+                <div class="wm-box"><div class="wb-l">Thermal Margin · T+120</div><div class="wb-v">+16.4 <span class="wb-unit">%</span></div></div>
+                <div class="wm-box"><div class="wb-l">First-mode Freq</div><div class="wb-v">42.8 <span class="wb-unit">Hz</span></div></div>
+                <div class="wm-box"><div class="wb-l">Solar Array Power</div><div class="wb-v">3,420 <span class="wb-unit">W</span></div></div>
+                <div class="wm-box"><div class="wb-l">Bus Voltage · full sun</div><div class="wb-v">27.8 <span class="wb-unit">V</span></div></div>
+              </div>
+
+              <div class="wm-arrow">
+                <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 14 L22 14 M16 8 L22 14 L16 20"/></svg>
+                <span style="font-size:9.5px;letter-spacing:0.12em">校准</span>
+              </div>
+
+              <div class="wm-col">
+                <div class="wm-title">Verify 实测 (42 小时热真空)</div>
+                <div class="wm-box diff"><div class="wb-l">Thermal Margin · T+120</div><div class="wb-v">+16.8 <span class="wb-unit">%  · Δ+0.4</span></div></div>
+                <div class="wm-box diff"><div class="wb-l">First-mode Freq</div><div class="wb-v">42.4 <span class="wb-unit">Hz · Δ-0.4</span></div></div>
+                <div class="wm-box diff"><div class="wb-l">Solar Array Power</div><div class="wb-v">3,412 <span class="wb-unit">W · Δ-8</span></div></div>
+                <div class="wm-box bad"><div class="wb-l">Bus Voltage · T+160</div><div class="wb-v">26.4 <span class="wb-unit">V · Δ-1.4 ⚠</span></div></div>
+              </div>
+            </div>
+            <div style="padding:10px 20px;border-top:1px dashed var(--line);background:var(--paper-elev);font-family:var(--mono);font-size:11px;color:var(--ink-2);letter-spacing:0.04em">
+              M2 组织记忆建议：将 Bus Voltage 温度衰减系数从 <code style="background:transparent;color:var(--rust)">-0.02 V/°C</code> 更新为 <code style="background:transparent;color:var(--grass)">-0.035 V/°C</code> · <a href="#" style="color:var(--teal)">查看证据 →</a>
+            </div>
+          </div>
+
+          <!-- Coverage -->
+          <div class="card">
+            <div class="card-head">
+              <h3>
+                <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 17 L3 7 L7 7 L7 17 M9 17 L9 3 L13 3 L13 17 M15 17 L15 11 L19 11 L19 17"/></svg>
+                标准覆盖率 · GJB 150 / ECSS
+              </h3>
+              <div class="cr"><span>标线 · 90%</span></div>
+            </div>
+            <div>
+              <div class="cov-item">
+                <div class="cov-top"><b>GJB 150.3A · 高温试验</b><span class="pct">96% · 128/133</span></div>
+                <div class="cov-bar"><div class="fill" style="width:96%;background:var(--grass)"></div><div class="mk"></div></div>
+              </div>
+              <div class="cov-item">
+                <div class="cov-top"><b>GJB 150.4A · 低温试验</b><span class="pct">100% · 96/96</span></div>
+                <div class="cov-bar"><div class="fill" style="width:100%;background:var(--grass)"></div><div class="mk"></div></div>
+              </div>
+              <div class="cov-item">
+                <div class="cov-top"><b>GJB 150.5 · 温度冲击</b><span class="pct">82% · 58/70</span></div>
+                <div class="cov-bar"><div class="fill" style="width:82%;background:var(--teal)"></div><div class="mk"></div></div>
+              </div>
+              <div class="cov-item">
+                <div class="cov-top"><b>ECSS-E-ST-10-03 热真空</b><span class="pct">74% · 42/57</span></div>
+                <div class="cov-bar"><div class="fill" style="width:74%;background:var(--teal)"></div><div class="mk"></div></div>
+              </div>
+              <div class="cov-item">
+                <div class="cov-top"><b>ECSS-E-ST-20-07 EMC</b><span class="pct">85% · 41/48</span></div>
+                <div class="cov-bar"><div class="fill" style="width:85%;background:var(--teal)"></div><div class="mk"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chain -->
+          <div class="chain">
+            <a class="chain-cell" href="workspace.html">
+              <div class="ci"><span>← Design</span><span class="arr">回溯</span></div>
+              <h5>追溯<em>设计</em>来源</h5>
+              <div class="cd">失败用例关联到 DOE #28 · 旧构型残留</div>
+            </a>
+            <a class="chain-cell" href="workspace-flow.html">
+              <div class="ci"><span>→ Flow</span><span class="arr">推进</span></div>
+              <h5>开<em>变更单</em></h5>
+              <div class="cd">CR-0419 · 热控系数更新 · 6 模块同步</div>
+            </a>
+            <a class="chain-cell" href="workspace-operate.html">
+              <div class="ci"><span>→ Operate</span><span class="arr">对标</span></div>
+              <h5>对<em>在轨</em>历史</h5>
+              <div class="cd">LEO-Relay 同温升工况 · 3 年真实数据</div>
+            </a>
+            <a class="chain-cell" href="workspace-command.html">
+              <div class="ci"><span>→ Command</span><span class="arr">归因</span></div>
+              <h5>入<em>进化</em>日志</h5>
+              <div class="cd">3 条规则候选 · 总师 ACK 后入库</div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside>
+          <!-- Certificate -->
+          <div class="card">
+            <div class="card-head side-card-head">
+              <h3>
+                <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3 L15 3 L15 14 L10 17 L5 14 Z"/><path d="M8 8 L10 10 L13 7"/></svg>
+                Gate 证书 · 实时草稿
+              </h3>
+              <div class="cr"><span>77.8%</span></div>
+            </div>
+            <div class="cert">
+              <div class="cert-head">
+                <div class="small">Verification Certificate · 3studio</div>
+                <h4>Thermal Environment · G-03</h4>
+                <div class="sub">XX-3 号卫星 · PRJ-0217</div>
+              </div>
+              <div class="cert-rows">
+                <div class="cr-row"><span class="k">test_suite</span><span class="v">thermal.full.v3</span></div>
+                <div class="cr-row"><span class="k">executed / total</span><span class="v">168 / 216</span></div>
+                <div class="cr-row"><span class="k">pass / fail / warn</span><span class="v">165 / 1 / 2</span></div>
+                <div class="cr-row"><span class="k">coverage (GJB)</span><span class="v">92.4%</span></div>
+                <div class="cr-row"><span class="k">design_delta</span><span class="v">Δ 0.8% nominal</span></div>
+                <div class="cr-row"><span class="k">evidence_bundle</span><span class="v">42.8 MB · 14 件</span></div>
+                <div class="cr-row"><span class="k">hash</span><span class="v" style="color:var(--teal)">4a3f…b921</span></div>
+              </div>
+              <div class="cert-seal">
+                <div>
+                  <div>待总师签字 · L3</div>
+                  <div style="margin-top:4px">预估 · 今晚 20:30 可签发</div>
+                </div>
+                <div class="stamp">Draft</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Regression -->
+          <div class="card">
+            <div class="card-head side-card-head">
+              <h3>
+                <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 10 A7 7 0 1 1 10 17"/><path d="M3 6 L3 10 L7 10"/></svg>
+                回归测试 · 最近 6 次
+              </h3>
+              <div class="cr"><span>2.3h / 次</span></div>
+            </div>
+            <div class="reg">
+              <div class="reg-row">
+                <span class="rt">Now</span>
+                <div class="rn"><b>#2147 · 热控全套</b><span>触发：CR-0417 太阳翼角度变更</span></div>
+                <span class="rv run">RUN · 77%</span>
+              </div>
+              <div class="reg-row">
+                <span class="rt">−4h</span>
+                <div class="rn"><b>#2146 · AOCS HIL</b><span>触发：控制参数调优</span></div>
+                <span class="rv pass">PASS</span>
+              </div>
+              <div class="reg-row">
+                <span class="rt">−18h</span>
+                <div class="rn"><b>#2145 · 电源 EMC</b><span>触发：PCDU 固件 v1.8.3</span></div>
+                <span class="rv hold">HOLD · 2W</span>
+              </div>
+              <div class="reg-row">
+                <span class="rt">−2d</span>
+                <div class="rn"><b>#2144 · 结构静力</b><span>触发：框架材料牌号变更</span></div>
+                <span class="rv pass">PASS</span>
+              </div>
+              <div class="reg-row">
+                <span class="rt">−3d</span>
+                <div class="rn"><b>#2143 · 推进点火</b><span>触发：阀门批次变更</span></div>
+                <span class="rv fail">FAIL × 2</span>
+              </div>
+              <div class="reg-row">
+                <span class="rt">−4d</span>
+                <div class="rn"><b>#2142 · 通信链路</b><span>例行</span></div>
+                <span class="rv pass">PASS</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Trust ledger -->
+          <div class="card">
+            <div class="card-head side-card-head">
+              <h3>
+                <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3 L16 6 L16 11 A6 6 0 0 1 10 17 A6 6 0 0 1 4 11 L4 6 Z"/><path d="M7 10 L9 12 L13 8"/></svg>
+                证据信任链 · 不可篡改
+              </h3>
+              <div class="cr"><span>14 件</span></div>
+            </div>
+            <div class="trust">
+              <div class="trust-row">
+                <div class="tt-ic">IN</div>
+                <div class="tt-tx"><b>test-plan-v3.json</b> · 216 项用例原始定义</div>
+                <div class="tt-h">4a3f…</div>
+              </div>
+              <div class="trust-row">
+                <div class="tt-ic">RAW</div>
+                <div class="tt-tx"><b>thermal-raw-168.zip</b> · 42 小时热真空原始遥测 · 42.8 MB</div>
+                <div class="tt-h">6f2e…</div>
+              </div>
+              <div class="trust-row">
+                <div class="tt-ic">CMP</div>
+                <div class="tt-tx"><b>compare-design-real.csv</b> · 校准表 · 4 项关键指标</div>
+                <div class="tt-h">88e0…</div>
+              </div>
+              <div class="trust-row">
+                <div class="tt-ic">SIG</div>
+                <div class="tt-tx"><b>auto-sign-165.sig</b> · Agent 自动签字 · 165 项通过</div>
+                <div class="tt-h">c917…</div>
+              </div>
+              <div class="trust-row">
+                <div class="tt-ic">BUG</div>
+                <div class="tt-tx"><b>bug-0417-rca.md</b> · RCA 推断 + 建议修复</div>
+                <div class="tt-h">2a11…</div>
+              </div>
+              <div class="trust-row" style="border-left-color:var(--ochre)">
+                <div class="tt-ic" style="background:var(--ochre);color:var(--ink)">HUM</div>
+                <div class="tt-tx"><b>human-review-pending.sig</b> · 待李承泽 L3 签字</div>
+                <div class="tt-h">—</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add verify task -->
+          <div class="card">
+            <div class="card-head side-card-head">
+              <h3>
+                <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 3 L10 17 M3 10 L17 10"/></svg>
+                追加验证
+              </h3>
+              <div class="cr"><span>V-21 在线</span></div>
+            </div>
+            <div style="padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+              <textarea style="width:100%;border:0;outline:0;resize:none;background:transparent;font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--ink);min-height:68px" placeholder="例如：为 BUG-0417 生成 12 项边界用例，覆盖 +150 ~ +170°C · 展开角 62 ~ 72°。"></textarea>
+              <div style="display:flex;gap:5px;flex-wrap:wrap">
+                <span class="chip chip-grass"><span class="dot" style="background:var(--grass)"></span>边界扩展</span>
+                <span class="chip">引用 M2</span>
+                <span class="chip">自动合并回归</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.06em">⌘↵ 发送</span>
+                <button class="btn btn-teal btn-sm" style="background:var(--grass);border-color:var(--grass)">启动验证 →</button>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

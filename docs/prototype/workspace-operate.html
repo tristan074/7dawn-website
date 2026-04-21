@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3studio · Operate / OrbitOps · 星座在轨运维</title>
+<link rel="stylesheet" href="assets/3studio.css">
+<style>
+:root{--op:var(--violet)}
+.app{display:grid;grid-template-columns:64px 260px 1fr;min-height:100vh}
+@media (max-width:1100px){.app{grid-template-columns:64px 1fr}.plist{display:none}}
+@media (max-width:760px){.app{grid-template-columns:1fr}.rail{display:none}}
+
+.rail{border-right:1px solid var(--line);background:var(--paper-elev);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:6px;position:sticky;top:0;height:100vh}
+.rail .logo{width:32px;height:32px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;color:var(--ink)}
+.rail a{width:40px;height:40px;border-radius:var(--r-s);display:flex;align-items:center;justify-content:center;color:var(--ink-mute);transition:all .15s;position:relative}
+.rail a svg{width:20px;height:20px}
+.rail a:hover{background:var(--paper-2);color:var(--ink)}
+.rail a.active{background:var(--ink);color:var(--paper)}
+.rail a .tip{position:absolute;left:calc(100% + 8px);top:50%;transform:translateY(-50%);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;padding:4px 8px;border-radius:2px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:100}
+.rail a:hover .tip{opacity:1}
+.rail .spacer{flex:1}
+.rail .ru{width:32px;height:32px;border-radius:50%;background:var(--op);color:var(--paper-ink);font-family:var(--serif);font-style:italic;font-weight:500;font-size:14px;display:flex;align-items:center;justify-content:center;margin-top:6px}
+
+.plist{border-right:1px solid var(--line);background:var(--paper);padding:18px 0;height:100vh;overflow-y:auto;position:sticky;top:0}
+.pl-head{padding:0 18px 14px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.pl-head .kicker{margin-bottom:6px;font-size:9.5px}
+.pl-head h3{margin:0;font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-0.01em}
+.pl-head h3 em{font-style:italic;color:var(--op);font-weight:400}
+.pl-head .sub{margin-top:6px;font-size:12px;color:var(--ink-mute);line-height:1.45}
+.pl-sec{padding:14px 18px 6px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-mute);display:flex;justify-content:space-between;font-weight:500}
+.pl-item{padding:8px 18px 8px 22px;display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink-2);cursor:pointer;border-left:2px solid transparent}
+.pl-item:hover{background:var(--paper-1)}
+.pl-item.active{background:var(--paper-2);border-left-color:var(--op);color:var(--ink);font-weight:500}
+.pl-item .pd{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:var(--grass)}
+.pl-item .pd.wait{background:var(--ochre)}
+.pl-item .pd.run{background:var(--teal);box-shadow:0 0 0 2px var(--teal-soft)}
+.pl-item .pd.fail{background:var(--rust);animation:pulse3s 1.2s infinite}
+.pl-item .pn{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pl-item .pm{font-family:var(--mono);font-size:9.5px;color:var(--ink-mute);letter-spacing:0.08em}
+
+.main{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{border-bottom:1px solid var(--line);padding:14px 26px;display:flex;justify-content:space-between;align-items:center;gap:16px;background:var(--paper-elev);flex-shrink:0}
+.crumbs{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:0.14em;color:var(--ink-mute);text-transform:uppercase}
+.crumbs .sep{color:var(--ink-ghost)}
+.crumbs b{color:var(--ink);font-weight:500}
+.topbar-right{display:flex;gap:14px;align-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:0.1em;color:var(--ink-mute);text-transform:uppercase}
+.op-dot{width:6px;height:6px;border-radius:50%;background:var(--grass);animation:pulse3s 2s infinite}
+
+.body{flex:1;overflow-y:auto;padding:24px 28px 60px}
+
+/* Hero — constellation state */
+.hero{display:grid;grid-template-columns:1fr 1.3fr;gap:20px;margin-bottom:22px}
+@media (max-width:1100px){.hero{grid-template-columns:1fr}}
+
+.hero-left{padding:22px 24px;border:1px solid var(--line-2);border-radius:var(--r-m);background:linear-gradient(135deg,var(--paper-elev),color-mix(in oklch,var(--op) 5%,var(--paper-elev)));position:relative;overflow:hidden}
+.hero-left::before{content:"ORBITOPS";position:absolute;right:-20px;top:50%;transform:translateY(-50%) rotate(-90deg);font-family:var(--mono);font-size:72px;font-weight:500;letter-spacing:0.15em;color:color-mix(in oklch,var(--op) 8%,transparent);pointer-events:none}
+.hero-left .kicker{color:var(--op);margin-bottom:10px}
+.hero-left h1{margin:0;font-family:var(--serif);font-size:28px;font-weight:500;letter-spacing:-0.018em;line-height:1.1;position:relative}
+.hero-left h1 em{font-style:italic;color:var(--op);font-weight:400}
+.hero-left .sub{font-size:13.5px;color:var(--ink-dim);line-height:1.5;max-width:42ch;margin-top:10px;position:relative}
+.hero-left .badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px;position:relative}
+
+/* Orbit map */
+.orbit-map{padding:20px;border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--ink);color:var(--paper);position:relative;overflow:hidden;min-height:280px;display:flex;flex-direction:column}
+.orbit-map .om-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;position:relative;z-index:2}
+.orbit-map .om-head .kicker{color:var(--teal-2);font-size:9.5px}
+.orbit-map .om-head h3{margin:2px 0 0;font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-0.01em}
+.orbit-map .om-meta{font-family:var(--mono);font-size:10px;color:rgba(242,238,230,0.5);letter-spacing:0.12em;text-align:right;line-height:1.5}
+.orbit-map .om-meta b{color:var(--grass);font-weight:500;display:block;font-size:16px;font-family:var(--serif);font-style:italic;margin-top:3px}
+
+.orbit-canvas{flex:1;position:relative;margin:0 -20px -20px;min-height:200px}
+.orbit-canvas svg{width:100%;height:100%;position:absolute;inset:0}
+.orbit-canvas .earth{fill:#2d2720;stroke:rgba(242,238,230,0.2);stroke-width:0.5}
+.orbit-canvas .orbit{fill:none;stroke:rgba(242,238,230,0.12);stroke-dasharray:2,3}
+.orbit-canvas .sat{fill:var(--teal-2)}
+.orbit-canvas .sat.warn{fill:var(--ochre)}
+.orbit-canvas .sat.down{fill:var(--rust);animation:satPulse 1.2s infinite}
+.orbit-canvas .sat.active{fill:var(--paper)}
+@keyframes satPulse{0%,100%{opacity:1;r:1.4}50%{opacity:0.3;r:2.2}}
+.orbit-canvas .label{fill:var(--teal-2);font-family:var(--mono);font-size:6px;letter-spacing:0.1em;font-weight:500}
+.orbit-canvas .pinbox{fill:none;stroke:var(--rust);stroke-width:0.5}
+.orbit-canvas .pinline{stroke:var(--rust);stroke-width:0.4;stroke-dasharray:1,1}
+
+/* KPI strip */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);margin-bottom:22px;overflow:hidden}
+@media (max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)}}
+.kpis .kc{padding:14px 18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:3px;position:relative}
+.kpis .kc:last-child{border-right:0}
+.kpis .kc .sl{font-family:var(--mono);font-size:9.5px;letter-spacing:0.18em;color:var(--ink-mute);text-transform:uppercase}
+.kpis .kc .sv{font-family:var(--serif);font-weight:350;font-size:24px;letter-spacing:-0.015em;line-height:1.05}
+.kpis .kc .sv em{font-style:italic;color:var(--op);font-weight:400}
+.kpis .kc .sv.up em{color:var(--grass)}
+.kpis .kc .sv.warn em{color:var(--rust)}
+.kpis .kc .st{font-family:var(--mono);font-size:9.5px;color:var(--ink-mute);letter-spacing:0.06em}
+.kpis .kc .spark{position:absolute;right:14px;top:16px;height:26px;width:60px;opacity:0.7}
+
+/* Grid: incident + runbook */
+.twocol{display:grid;grid-template-columns:1.6fr 1fr;gap:20px;margin-bottom:22px}
+@media (max-width:1100px){.twocol{grid-template-columns:1fr}}
+
+.panel{border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);overflow:hidden;display:flex;flex-direction:column}
+.panel-head{padding:14px 20px;border-bottom:1px solid var(--line);background:var(--paper-elev);display:flex;justify-content:space-between;align-items:center}
+.panel-head h3{margin:0;font-family:var(--serif);font-size:17px;font-weight:500;display:flex;align-items:center;gap:10px}
+.panel-head h3 .glyph{width:20px;height:20px;color:var(--op)}
+.panel-head .p-m{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.1em;text-transform:uppercase;display:flex;gap:10px;align-items:center}
+
+/* Incident timeline (RCA) */
+.rca{padding:20px 24px;display:flex;flex-direction:column;gap:0}
+.rca .rc-top{display:flex;gap:14px;align-items:flex-start;padding-bottom:14px;border-bottom:1px dashed var(--line-2);margin-bottom:14px}
+.rca .rc-top .num{width:54px;height:54px;border-radius:4px;background:var(--rust);color:var(--paper-ink);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0}
+.rca .rc-top .num b{font-family:var(--serif);font-style:italic;font-size:20px;font-weight:500;line-height:1}
+.rca .rc-top .num span{font-family:var(--mono);font-size:8.5px;letter-spacing:0.14em;margin-top:2px}
+.rca .rc-top .ti{flex:1;min-width:0}
+.rca .rc-top .ti h4{margin:0;font-family:var(--serif);font-size:17px;font-weight:500;letter-spacing:-0.005em;display:flex;align-items:center;gap:8px}
+.rca .rc-top .ti .svl{font-family:var(--mono);font-size:9px;padding:2px 6px;background:var(--rust);color:var(--paper-ink);border-radius:2px;letter-spacing:0.1em;font-weight:500}
+.rca .rc-top .ti .desc{font-size:12.5px;color:var(--ink-dim);line-height:1.5;margin-top:6px}
+.rca .rc-top .ti .tags{margin-top:8px;display:flex;gap:5px;flex-wrap:wrap}
+.rca .rc-top .ti .tags .m{font-family:var(--mono);font-size:9px;letter-spacing:0.08em;padding:2px 5px;border:1px solid var(--line-2);border-radius:2px;color:var(--ink-mute);text-transform:uppercase}
+
+.rc-steps{display:flex;flex-direction:column;gap:0;padding-left:4px;position:relative}
+.rc-steps::before{content:"";position:absolute;left:10px;top:4px;bottom:4px;width:1px;background:var(--line-2)}
+.rc-step{display:grid;grid-template-columns:24px 68px 1fr;gap:12px;padding:8px 0;align-items:flex-start;position:relative}
+.rc-step .bullet{width:10px;height:10px;border-radius:50%;background:var(--paper);border:2px solid var(--line-3);margin-left:5px;margin-top:4px;z-index:2}
+.rc-step.agent .bullet{background:var(--teal);border-color:var(--teal)}
+.rc-step.human .bullet{background:var(--rust);border-color:var(--rust)}
+.rc-step.done .bullet{background:var(--grass);border-color:var(--grass)}
+.rc-step.cur .bullet{background:var(--op);border-color:var(--op);box-shadow:0 0 0 3px color-mix(in oklch,var(--op) 25%,transparent)}
+.rc-step .ts{font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.04em;padding-top:3px}
+.rc-step .sc{display:flex;flex-direction:column;gap:3px;padding-bottom:4px}
+.rc-step .sc .st{font-size:13px;font-weight:500;color:var(--ink);line-height:1.45}
+.rc-step .sc .st .who{font-family:var(--mono);font-size:9.5px;padding:1px 5px;border-radius:2px;letter-spacing:0.08em;margin-right:5px;text-transform:uppercase;font-weight:500}
+.rc-step.agent .who{background:var(--ink);color:var(--teal-2)}
+.rc-step.human .who{background:var(--rust);color:var(--paper-ink)}
+.rc-step.done .who{background:var(--grass);color:var(--paper-ink)}
+.rc-step.cur .who{background:var(--op);color:var(--paper-ink)}
+.rc-step .sc .dt{font-family:var(--mono);font-size:11px;color:var(--ink-mute);line-height:1.55;letter-spacing:0.01em}
+.rc-step .sc .evidence{margin-top:5px;padding:6px 10px;background:var(--paper-1);border-left:2px solid var(--teal);border-radius:0 3px 3px 0;font-family:var(--mono);font-size:10.5px;color:var(--ink-2);line-height:1.5}
+.rc-step .sc .evidence b{font-family:var(--sans);color:var(--teal);font-weight:500}
+
+/* Runbook card */
+.runbook{display:flex;flex-direction:column}
+.rb-list{padding:4px 0;overflow-y:auto;max-height:620px}
+.rb-item{padding:12px 18px;border-bottom:1px dashed var(--line);display:flex;flex-direction:column;gap:6px;cursor:pointer}
+.rb-item:hover{background:var(--paper-1)}
+.rb-item:last-child{border-bottom:0}
+.rb-item.active{background:color-mix(in oklch,var(--op) 6%,var(--paper));border-left:2px solid var(--op)}
+.rb-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.rb-top b{font-family:var(--serif);font-size:13.5px;font-weight:500;letter-spacing:-0.005em;line-height:1.3}
+.rb-top .auto{font-family:var(--mono);font-size:8.5px;padding:2px 5px;border-radius:2px;letter-spacing:0.1em;font-weight:500;flex-shrink:0}
+.rb-top .auto.a{background:var(--grass);color:var(--paper-ink)}
+.rb-top .auto.s{background:var(--ochre);color:var(--ink)}
+.rb-top .auto.m{background:var(--paper-2);color:var(--ink-2);border:1px solid var(--line-2)}
+.rb-meta{display:flex;gap:8px;font-family:var(--mono);font-size:10px;color:var(--ink-mute);letter-spacing:0.04em;flex-wrap:wrap}
+.rb-meta .hit{color:var(--teal)}
+.rb-bar{height:3px;background:var(--paper-2);border-radius:2px;overflow:hidden;margin-top:2px}
+.rb-bar i{display:block;height:100%;background:var(--op);border-radius:2px}
+
+/* Fleet table */
+.fleet{border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);overflow:hidden;margin-bottom:22px}
+.fleet-grid{display:grid;grid-template-columns:auto 1.3fr 1fr 1fr 1fr 1fr auto;font-family:var(--mono);font-size:11.5px}
+.fleet .fh{padding:10px 14px;background:var(--paper-2);color:var(--ink-mute);letter-spacing:0.1em;text-transform:uppercase;font-size:9.5px;border-bottom:1px solid var(--line);font-weight:500}
+.fleet .fc{padding:10px 14px;border-bottom:1px dashed var(--line);display:flex;align-items:center;gap:6px}
+.fleet .fc.name{font-weight:500;color:var(--ink);font-size:12px;font-family:var(--sans)}
+.fleet .fc.name span{font-size:10px;color:var(--ink-mute);font-family:var(--mono);margin-left:6px;letter-spacing:0.04em}
+.fleet .fc .st{width:7px;height:7px;border-radius:50%;background:var(--grass);flex-shrink:0}
+.fleet .fc .st.warn{background:var(--ochre)}
+.fleet .fc .st.down{background:var(--rust);animation:pulse3s 1.2s infinite}
+.fleet .fc .st.safe{background:var(--teal)}
+.fleet .fc .bar{width:80px;height:5px;background:var(--paper-2);border-radius:2px;overflow:hidden}
+.fleet .fc .bar i{display:block;height:100%;background:var(--grass)}
+.fleet .fc .bar.warn i{background:var(--ochre);width:68%}
+.fleet .fc .bar.down i{background:var(--rust);width:22%}
+.fleet .fc .bar.ok i{width:94%}
+.fleet .fc .bar.good i{width:81%}
+.fleet .fr{display:contents}
+.fleet .fr:hover .fc{background:var(--paper-1)}
+.fleet .fc .act{font-family:var(--sans);padding:2px 8px;border-radius:2px;font-size:10px;background:var(--ink);color:var(--paper);letter-spacing:0.04em;cursor:pointer}
+
+/* Evolution rule box */
+.evo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:1100px){.evo{grid-template-columns:1fr}}
+.evo-card{border:1px solid var(--line-2);border-radius:var(--r-m);background:var(--paper);overflow:hidden}
+.evo-body{padding:18px 22px}
+.evo-rule{padding:14px;background:var(--ink);color:var(--paper);border-radius:4px;display:flex;flex-direction:column;gap:6px;margin-bottom:14px;position:relative;overflow:hidden}
+.evo-rule::before{content:"RULE";position:absolute;right:10px;top:8px;font-family:var(--mono);font-size:8.5px;color:rgba(242,238,230,0.35);letter-spacing:0.2em}
+.evo-rule .rid{font-family:var(--mono);font-size:9.5px;color:var(--teal-2);letter-spacing:0.14em}
+.evo-rule .rt{font-family:var(--serif);font-size:15.5px;line-height:1.35;letter-spacing:-0.005em}
+.evo-rule .rt em{font-style:italic;color:var(--teal-2)}
+.evo-rule .rm{font-family:var(--mono);font-size:10px;color:rgba(242,238,230,0.55);letter-spacing:0.06em;padding-top:4px;border-top:1px solid rgba(242,238,230,0.1);margin-top:2px}
+
+.evo-impact{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.evo-cell{padding:10px 12px;background:var(--paper-1);border-radius:3px}
+.evo-cell .l{font-family:var(--mono);font-size:9.5px;letter-spacing:0.12em;color:var(--ink-mute);text-transform:uppercase;margin-bottom:3px}
+.evo-cell .v{font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:-0.01em}
+.evo-cell .v em{font-style:italic;color:var(--grass);font-weight:400}
+.evo-cell .m{font-family:var(--mono);font-size:9.5px;color:var(--ink-mute)}
+
+.evo-chart{padding:18px 22px;border-top:1px dashed var(--line-2)}
+.evo-chart svg{width:100%;height:120px}
+.evo-chart .el{font-family:var(--mono);font-size:9px;fill:var(--ink-mute);letter-spacing:0.08em}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <a href="index.html" class="logo"><svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7 L14 3 L24 7 L14 11 Z" fill="currentColor" fill-opacity="0.08"/><path d="M4 14 L14 10 L24 14 L14 18 Z"/><path d="M4 21 L14 17 L24 21 L14 25 Z"/></svg></a>
+    <a href="app.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.5" y="2.5" width="5" height="5"/><rect x="10.5" y="2.5" width="5" height="5"/><rect x="2.5" y="10.5" width="5" height="5"/><rect x="10.5" y="10.5" width="5" height="5"/></svg><span class="tip">工作台</span></a>
+    <a href="workspace.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 15 L9 3 L15 15"/><path d="M6 11 L12 11"/></svg><span class="tip">Design</span></a>
+    <a href="workspace-verify.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="12" height="12"/><path d="M6 9 L8.5 11.5 L13 7"/></svg><span class="tip">Verify</span></a>
+    <a href="workspace-flow.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="9" r="5"/><path d="M9 4 L11 6 L9 8"/><path d="M9 14 L7 12 L9 10"/></svg><span class="tip">Flow</span></a>
+    <a href="workspace-operate.html" class="active"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 14 L7 7 L10 11 L16 4"/><circle cx="16" cy="4" r="1.2" fill="currentColor"/></svg><span class="tip">Operate</span></a>
+    <a href="workspace-command.html"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 15 L3 9 L6 9 L6 15"/><path d="M8 15 L8 5 L11 5 L11 15"/><path d="M13 15 L13 11 L16 11 L16 15"/></svg><span class="tip">Command</span></a>
+    <div class="spacer"></div>
+    <a href="#"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3 L9 15 M3 9 L15 9"/></svg><span class="tip">知识库</span></a>
+    <a href="#"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="9" cy="9" r="6"/><path d="M9 5 L9 9 L12 11"/></svg><span class="tip">设置</span></a>
+    <div class="ru">李</div>
+  </aside>
+
+  <aside class="plist">
+    <div class="pl-head">
+      <div class="kicker">Space S-04 · OrbitOps</div>
+      <h3><em>Operate</em> 空间</h3>
+      <div class="sub">航天在轨运维旗舰 · 104 颗卫星接管中</div>
+    </div>
+
+    <div class="pl-sec"><span>星座 / 任务</span><span>4</span></div>
+    <div class="pl-item active"><span class="pd"></span><span class="pn">LEO-Relay 星座</span><span class="pm">104</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">GEO 通信 2 号</span><span class="pm">1</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">遥感 27 号</span><span class="pm">3</span></div>
+    <div class="pl-item"><span class="pd run"></span><span class="pn">XX-3 (发射后)</span><span class="pm">pre</span></div>
+
+    <div class="pl-sec"><span>告警 · 活跃</span><span>3</span></div>
+    <div class="pl-item"><span class="pd fail"></span><span class="pn">INC-0733 · #37 动量轮</span><span class="pm">P1</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">INC-0734 · #22 电源偏</span><span class="pm">P2</span></div>
+    <div class="pl-item"><span class="pd wait"></span><span class="pn">INC-0735 · #88 链路降</span><span class="pm">P3</span></div>
+
+    <div class="pl-sec"><span>Runbook 库</span><span>142</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">RB-201 动量轮转速异常</span><span class="pm">A</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">RB-137 蓄电池深放</span><span class="pm">A</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">RB-089 姿控丢锁</span><span class="pm">S</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">RB-044 热控饱和</span><span class="pm">A</span></div>
+
+    <div class="pl-sec"><span>Operate Agent</span><span>6</span></div>
+    <div class="pl-item"><span class="pd run"></span><span class="pn">Telemetry Agent · O-47</span><span class="pm">Busy</span></div>
+    <div class="pl-item"><span class="pd run"></span><span class="pn">RCA Agent · O-48</span><span class="pm">Busy</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">Runbook Agent · O-49</span><span class="pm">Idle</span></div>
+    <div class="pl-item"><span class="pd"></span><span class="pn">Handoff Agent · O-50</span><span class="pm">Idle</span></div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="crumbs">
+        <span>3studio</span><span class="sep">/</span>
+        <span>轨道辰光</span><span class="sep">/</span>
+        <span>OrbitOps</span><span class="sep">/</span>
+        <b>LEO-Relay · INC-0733 · RCA</b>
+      </div>
+      <div class="topbar-right">
+        <span class="op-dot"></span>
+        <span>104 星 · 98 健康 · 5 警告 · 1 P1</span>
+        <span style="color:var(--ink-ghost)">|</span>
+        <span>14:02 UTC+8 · Tick 38 / 60s</span>
+      </div>
+    </div>
+
+    <div class="body">
+      <!-- Hero -->
+      <div class="hero">
+        <div class="hero-left">
+          <div class="kicker">P1 · Live Incident · 03:22:14</div>
+          <h1>LEO-Relay <em>#37 卫星</em>·<br>动量轮转速异常飘升</h1>
+          <p class="sub">RCA Agent 已定位至 <b>Z 轴动量轮机械摩擦升高</b>，类比星座内 <b>2 星历史案例</b>·建议切换备份轮 + 降载荷模式·影响面 1 星 · 可恢复。</p>
+          <div class="badges">
+            <span class="chip chip-rust">P1 · 服务降级</span>
+            <span class="chip">RCA 置信度 92%</span>
+            <span class="chip">Runbook RB-201 命中</span>
+            <span class="chip chip-grass">Agent 可自动处置 L1</span>
+            <span class="chip">SLA 剩 2h 38m</span>
+          </div>
+        </div>
+
+        <div class="orbit-map">
+          <div class="om-head">
+            <div>
+              <div class="kicker">LEO-Relay · LIVE</div>
+              <h3>星座态势 · Orbit Map</h3>
+            </div>
+            <div class="om-meta">
+              104 NOMINAL · 98<br>
+              1 P1 INCIDENT<br>
+              <b>98.0% 健康</b>
+            </div>
+          </div>
+          <div class="orbit-canvas">
+            <svg viewBox="0 0 300 180" preserveAspectRatio="xMidYMid meet">
+              <!-- Orbits -->
+              <ellipse class="orbit" cx="150" cy="90" rx="130" ry="44"/>
+              <ellipse class="orbit" cx="150" cy="90" rx="110" ry="60"/>
+              <ellipse class="orbit" cx="150" cy="90" rx="90" ry="74"/>
+              <!-- Earth -->
+              <circle class="earth" cx="150" cy="90" r="18"/>
+              <path d="M138 86 Q144 82 150 86 Q156 84 162 87" fill="none" stroke="rgba(242,238,230,0.12)" stroke-width="0.5"/>
+              <path d="M140 92 Q148 96 156 93" fill="none" stroke="rgba(242,238,230,0.12)" stroke-width="0.5"/>
+              <!-- Sats outer orbit -->
+              <circle class="sat" cx="280" cy="90" r="1.4"/>
+              <circle class="sat" cx="253" cy="61" r="1.4"/>
+              <circle class="sat" cx="213" cy="47" r="1.4"/>
+              <circle class="sat warn" cx="170" cy="46" r="1.6"/>
+              <circle class="sat" cx="125" cy="47" r="1.4"/>
+              <circle class="sat" cx="85" cy="58" r="1.4"/>
+              <circle class="sat" cx="40" cy="86" r="1.4"/>
+              <circle class="sat" cx="60" cy="120" r="1.4"/>
+              <circle class="sat" cx="112" cy="132" r="1.4"/>
+              <circle class="sat" cx="180" cy="132" r="1.4"/>
+              <circle class="sat" cx="235" cy="120" r="1.4"/>
+              <!-- Mid orbit -->
+              <circle class="sat" cx="260" cy="90" r="1.4"/>
+              <circle class="sat" cx="230" cy="55" r="1.4"/>
+              <circle class="sat" cx="190" cy="40" r="1.4"/>
+              <circle class="sat" cx="110" cy="40" r="1.4"/>
+              <circle class="sat" cx="70" cy="55" r="1.4"/>
+              <circle class="sat" cx="45" cy="115" r="1.4"/>
+              <circle class="sat" cx="85" cy="140" r="1.4"/>
+              <circle class="sat" cx="150" cy="150" r="1.4"/>
+              <circle class="sat" cx="215" cy="140" r="1.4"/>
+              <!-- Inner -->
+              <circle class="sat" cx="240" cy="90" r="1.4"/>
+              <circle class="sat" cx="210" cy="52" r="1.4"/>
+              <circle class="sat" cx="150" cy="20" r="1.4"/>
+              <circle class="sat" cx="90" cy="52" r="1.4"/>
+              <circle class="sat" cx="65" cy="90" r="1.4"/>
+              <circle class="sat" cx="100" cy="150" r="1.4"/>
+              <circle class="sat" cx="200" cy="150" r="1.4"/>
+              <!-- Down sat -->
+              <circle class="sat down" cx="170" cy="46" r="2.4"/>
+              <circle class="sat active" cx="170" cy="46" r="4" fill="none" stroke="var(--rust)" stroke-width="0.6"/>
+              <circle cx="170" cy="46" r="8" fill="none" stroke="var(--rust)" stroke-width="0.4" stroke-dasharray="2,2" opacity="0.6"/>
+              <!-- Pin label -->
+              <line class="pinline" x1="170" y1="46" x2="220" y2="20"/>
+              <rect class="pinbox" x="216" y="13" width="66" height="14" rx="1"/>
+              <text x="219" y="19" class="label" fill="var(--rust)">SAT #37 · P1</text>
+              <text x="219" y="25" class="label" fill="rgba(242,238,230,0.5)">MOM-WHEEL Z</text>
+              <!-- scatter background stars -->
+              <g opacity="0.3">
+                <circle cx="15" cy="20" r="0.5" fill="rgba(242,238,230,0.6)"/>
+                <circle cx="285" cy="30" r="0.5" fill="rgba(242,238,230,0.6)"/>
+                <circle cx="280" cy="160" r="0.5" fill="rgba(242,238,230,0.6)"/>
+                <circle cx="10" cy="170" r="0.5" fill="rgba(242,238,230,0.6)"/>
+                <circle cx="270" cy="10" r="0.5" fill="rgba(242,238,230,0.6)"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI strip -->
+      <div class="kpis">
+        <div class="kc"><span class="sl">在轨资产</span><span class="sv"><em>104</em></span><span class="st">LEO-Relay 星座</span>
+          <svg class="spark" viewBox="0 0 60 26"><polyline points="0,18 10,16 20,16 30,14 40,14 50,14 60,14" fill="none" stroke="var(--grass)" stroke-width="1"/></svg>
+        </div>
+        <div class="kc"><span class="sl">健康度</span><span class="sv up"><em>98.0</em>%</span><span class="st">5 告警 · 1 P1</span></div>
+        <div class="kc"><span class="sl">MTTA</span><span class="sv"><em>8</em>s</span><span class="st">↓ 94% vs 人工</span></div>
+        <div class="kc"><span class="sl">MTTR · 中值</span><span class="sv"><em>6</em>m</span><span class="st">Agent 平均</span></div>
+        <div class="kc"><span class="sl">自动处置率</span><span class="sv"><em>94.2</em>%</span><span class="st">近 30 天</span></div>
+        <div class="kc"><span class="sl">SLA 可用</span><span class="sv up"><em>99.97</em>%</span><span class="st">月内承诺 99.9</span></div>
+      </div>
+
+      <!-- RCA + Runbook -->
+      <div class="twocol">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>
+              <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="7"/><path d="M10 5 L10 10 L13 12"/></svg>
+              INC-0733 · RCA 时间线
+            </h3>
+            <div class="p-m"><span class="op-dot"></span><span>LIVE · 刷新 4s</span></div>
+          </div>
+          <div class="rca">
+            <div class="rc-top">
+              <div class="num"><b>#37</b><span>P1</span></div>
+              <div class="ti">
+                <h4>LEO-Relay #37 · 动量轮 Z 轴异常 <span class="svl">P1 · SERVICE-DEGRADE</span></h4>
+                <p class="desc">地面感知 01:14 起 Z 轴动量轮转速在 ±2% 目标区以外振荡，偏差呈 0.03%/min 线性扩大；载荷指向误差 &gt; 0.08°，已触发服务降级。</p>
+                <div class="tags">
+                  <span class="m">AOCS</span><span class="m">MECH</span><span class="m">MOM-WHEEL</span><span class="m">RB-201 hit</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="rc-steps">
+              <div class="rc-step agent">
+                <span class="bullet"></span>
+                <span class="ts">01:14:02</span>
+                <div class="sc">
+                  <div class="st"><span class="who">TELEMETRY</span>遥测阈值触发</div>
+                  <div class="dt">动量轮 Z 转速 rpm 跌出 98% 保护带 · 姿态四元数 q3 振幅 0.02° · 规则 R-0411 命中。</div>
+                </div>
+              </div>
+
+              <div class="rc-step agent">
+                <span class="bullet"></span>
+                <span class="ts">01:14:10</span>
+                <div class="sc">
+                  <div class="st"><span class="who">RCA</span>相关性扫描</div>
+                  <div class="dt">扫描 120 项关联信号 · 温度/电流/控制律 · 收敛到 <b>机械摩擦模型</b> 贝叶斯后验 92%。</div>
+                  <div class="evidence"><b>置信：</b>与 #22 (2024-11) 和 #67 (2025-07) 事件相似度 0.88 / 0.84 · 历史解决方案均为动量轮切换。</div>
+                </div>
+              </div>
+
+              <div class="rc-step agent">
+                <span class="bullet"></span>
+                <span class="ts">01:14:34</span>
+                <div class="sc">
+                  <div class="st"><span class="who">RUNBOOK</span>匹配到 RB-201</div>
+                  <div class="dt">RB-201 "动量轮摩擦异常" · 3 步恢复 · 历史成功率 96.3% · 建议 L1 自动执行。</div>
+                </div>
+              </div>
+
+              <div class="rc-step done">
+                <span class="bullet"></span>
+                <span class="ts">01:15:01</span>
+                <div class="sc">
+                  <div class="st"><span class="who">AUTO-STEP 1</span>切换到备份动量轮 B</div>
+                  <div class="dt">发送 TC MOM_SW_B · 接收 ACK 1.8s · 姿态恢复中。</div>
+                  <div class="evidence"><b>证据：</b>q3 偏差从 0.02° 降至 0.004° · 指向 RMS 恢复至 0.03°（阈值内）</div>
+                </div>
+              </div>
+
+              <div class="rc-step done">
+                <span class="bullet"></span>
+                <span class="ts">01:16:18</span>
+                <div class="sc">
+                  <div class="st"><span class="who">AUTO-STEP 2</span>载荷降功耗 · 40%</div>
+                  <div class="dt">数传降速 · 光学载荷待机 · 功耗预算 +6.2W 裕度。</div>
+                </div>
+              </div>
+
+              <div class="rc-step cur">
+                <span class="bullet"></span>
+                <span class="ts">现在</span>
+                <div class="sc">
+                  <div class="st"><span class="who">AUTO-STEP 3</span>30 min 姿态稳定观察 · 14:02 结束</div>
+                  <div class="dt">关键指标：q3 漂移速率、B 轮温升、B 轮电流。已稳定 28 分钟，达阈值即自动闭环并生成在轨测试建议单。</div>
+                  <div class="evidence"><b>下一步预检：</b>若稳定 → 自动闭环 L1 · 推送 Flow 空间 CR-0423（A 轮离轨检修）· 送 Design 空间热控 RCA 根因确认（是否润滑失效）</div>
+                </div>
+              </div>
+
+              <div class="rc-step human">
+                <span class="bullet"></span>
+                <span class="ts">待触发</span>
+                <div class="sc">
+                  <div class="st"><span class="who">HANDOFF</span>若不稳定 → 升级总师 L3</div>
+                  <div class="dt">非稳定收敛时自动转人工，附完整证据包（遥测、决策、模型）、历史类比案例、三套备选处置方案。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Runbook matches -->
+        <div class="panel runbook">
+          <div class="panel-head">
+            <h3>
+              <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4 L4 16 L16 16 L16 6 L14 4 Z"/><path d="M14 4 L14 6 L16 6 M7 8 L13 8 M7 11 L13 11 M7 14 L10 14"/></svg>
+              Runbook · 本事件匹配
+            </h3>
+            <div class="p-m"><span>3 命中 · 按置信度</span></div>
+          </div>
+          <div class="rb-list">
+            <div class="rb-item active">
+              <div class="rb-top"><b>RB-201 · 动量轮摩擦异常</b><span class="auto a">AUTO L1</span></div>
+              <div class="rb-meta"><span class="hit">置信 92%</span><span>3 步</span><span>历史 96.3% 成功</span><span>曾执行 47 次</span></div>
+              <div class="rb-bar"><i style="width:92%"></i></div>
+            </div>
+            <div class="rb-item">
+              <div class="rb-top"><b>RB-204 · 动量轮编码器抖动</b><span class="auto s">SEMI</span></div>
+              <div class="rb-meta"><span class="hit">置信 44%</span><span>4 步</span><span>历史 78%</span></div>
+              <div class="rb-bar"><i style="width:44%"></i></div>
+            </div>
+            <div class="rb-item">
+              <div class="rb-top"><b>RB-118 · 姿态控制律饱和</b><span class="auto m">MANUAL</span></div>
+              <div class="rb-meta"><span class="hit">置信 18%</span><span>次要候选</span></div>
+              <div class="rb-bar"><i style="width:18%"></i></div>
+            </div>
+          </div>
+
+          <div class="panel-head" style="border-top:1px solid var(--line)">
+            <h3 style="font-size:14px">
+              <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" style="width:16px;height:16px"><path d="M3 17 L3 10 L7 10 L7 17 M9 17 L9 4 L13 4 L13 17 M15 17 L15 13"/></svg>
+              Fleet · 30 天事件
+            </h3>
+            <div class="p-m"><span>按严重度</span></div>
+          </div>
+          <div style="padding:14px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;font-family:var(--mono);font-size:10px">
+            <div style="text-align:center;padding:10px 0;background:var(--paper-1);border-radius:3px"><div style="font-family:var(--serif);font-size:22px;color:var(--rust);font-weight:500">3</div><div style="color:var(--ink-mute);letter-spacing:0.1em;margin-top:2px">P1</div></div>
+            <div style="text-align:center;padding:10px 0;background:var(--paper-1);border-radius:3px"><div style="font-family:var(--serif);font-size:22px;color:var(--ochre);font-weight:500">11</div><div style="color:var(--ink-mute);letter-spacing:0.1em;margin-top:2px">P2</div></div>
+            <div style="text-align:center;padding:10px 0;background:var(--paper-1);border-radius:3px"><div style="font-family:var(--serif);font-size:22px;color:var(--grass);font-weight:500">128</div><div style="color:var(--ink-mute);letter-spacing:0.1em;margin-top:2px">P3</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fleet table -->
+      <div class="fleet">
+        <div class="panel-head">
+          <h3>
+            <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="4" cy="10" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
+            Fleet · LEO-Relay · 异常卫星明细
+          </h3>
+          <div class="p-m"><span>5 告警 · 总 104 星 · 全部在控</span></div>
+        </div>
+        <div class="fleet-grid">
+          <div class="fh">状态</div><div class="fh">卫星 / 位置</div><div class="fh">告警</div><div class="fh">健康</div><div class="fh">电池 SOC</div><div class="fh">载荷</div><div class="fh">操作</div>
+
+          <div class="fr">
+            <div class="fc"><span class="st down"></span></div>
+            <div class="fc name">LEO-#37<span>ORBIT-A · RAAN 148°</span></div>
+            <div class="fc">MOM-WHEEL Z · P1</div>
+            <div class="fc"><div class="bar down"><i></i></div></div>
+            <div class="fc"><div class="bar good"><i></i></div> 78%</div>
+            <div class="fc" style="color:var(--ochre)">降级运行</div>
+            <div class="fc"><a class="act">查看 RCA</a></div>
+          </div>
+
+          <div class="fr">
+            <div class="fc"><span class="st warn"></span></div>
+            <div class="fc name">LEO-#22<span>ORBIT-B · RAAN 72°</span></div>
+            <div class="fc">电源供电偏 · P2</div>
+            <div class="fc"><div class="bar warn"><i></i></div></div>
+            <div class="fc"><div class="bar ok"><i></i></div> 84%</div>
+            <div class="fc">名义</div>
+            <div class="fc"><a class="act">诊断</a></div>
+          </div>
+
+          <div class="fr">
+            <div class="fc"><span class="st warn"></span></div>
+            <div class="fc name">LEO-#88<span>ORBIT-C · RAAN 300°</span></div>
+            <div class="fc">S 波段链路 -3dB · P3</div>
+            <div class="fc"><div class="bar warn"><i></i></div></div>
+            <div class="fc"><div class="bar good"><i></i></div> 81%</div>
+            <div class="fc">名义</div>
+            <div class="fc"><a class="act">诊断</a></div>
+          </div>
+
+          <div class="fr">
+            <div class="fc"><span class="st safe"></span></div>
+            <div class="fc name">LEO-#14<span>ORBIT-A · RAAN 24°</span></div>
+            <div class="fc">安全模式 · 观察</div>
+            <div class="fc"><div class="bar ok"><i></i></div></div>
+            <div class="fc"><div class="bar ok"><i></i></div> 92%</div>
+            <div class="fc">待恢复</div>
+            <div class="fc"><a class="act">恢复</a></div>
+          </div>
+
+          <div class="fr">
+            <div class="fc"><span class="st warn"></span></div>
+            <div class="fc name">LEO-#55<span>ORBIT-B · RAAN 120°</span></div>
+            <div class="fc">陀螺漂移超限 · P3</div>
+            <div class="fc"><div class="bar warn"><i></i></div></div>
+            <div class="fc"><div class="bar good"><i></i></div> 76%</div>
+            <div class="fc">名义</div>
+            <div class="fc"><a class="act">校准</a></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Evolution: new rule + learning curve -->
+      <div class="evo">
+        <div class="evo-card">
+          <div class="panel-head">
+            <h3>
+              <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 15 L8 10 L12 13 L17 5"/><circle cx="17" cy="5" r="1.3" fill="currentColor"/></svg>
+              从事件中学习 · 新规则产出
+            </h3>
+            <div class="p-m"><span>INC-0733 衍生</span></div>
+          </div>
+          <div class="evo-body">
+            <div class="evo-rule">
+              <div class="rid">M2 · RULE-0411-v2 · 组织记忆</div>
+              <div class="rt">对 LEO-Relay 动量轮：<em>当 Z 轴转速偏差持续 > 90s 且温升 > 1.5°C/min</em>，直接切换至 B 轮 + 载荷降载，无需人工。</div>
+              <div class="rm">证据：3 次类比事件 · 处理时间从 42 min → 6 min · 作者 RCA Agent · 待总师批准入库</div>
+            </div>
+
+            <div class="evo-impact">
+              <div class="evo-cell"><div class="l">类似事件预计 MTTR</div><div class="v"><em>−86</em>%</div><div class="m">42m → 6m</div></div>
+              <div class="evo-cell"><div class="l">此类覆盖星数</div><div class="v"><em>104</em></div><div class="m">LEO-Relay 全体</div></div>
+              <div class="evo-cell"><div class="l">需人工介入</div><div class="v"><em>−70</em>%</div><div class="m">剩余仅极端场景</div></div>
+              <div class="evo-cell"><div class="l">回溯建议</div><div class="v">#14 · #67</div><div class="m">入库后同步消解告警</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="evo-card">
+          <div class="panel-head">
+            <h3>
+              <svg class="glyph" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 17 L3 3 M3 17 L17 17"/><path d="M5 14 L8 10 L11 12 L15 6"/></svg>
+              自动处置率 · 学习曲线
+            </h3>
+            <div class="p-m"><span>最近 12 个月</span></div>
+          </div>
+          <div class="evo-chart">
+            <svg viewBox="0 0 400 120" preserveAspectRatio="none">
+              <!-- Gridlines -->
+              <line x1="0" y1="100" x2="400" y2="100" stroke="rgba(20,17,12,0.12)"/>
+              <line x1="0" y1="70" x2="400" y2="70" stroke="rgba(20,17,12,0.06)" stroke-dasharray="2,3"/>
+              <line x1="0" y1="40" x2="400" y2="40" stroke="rgba(20,17,12,0.06)" stroke-dasharray="2,3"/>
+              <line x1="0" y1="10" x2="400" y2="10" stroke="rgba(20,17,12,0.06)" stroke-dasharray="2,3"/>
+              <text x="4" y="14" class="el">100%</text>
+              <text x="4" y="44" class="el">80%</text>
+              <text x="4" y="74" class="el">60%</text>
+
+              <!-- Area -->
+              <path d="M30 70 L60 65 L90 58 L120 52 L150 42 L180 35 L210 30 L240 24 L270 20 L300 16 L330 12 L370 8 L370 100 L30 100 Z"
+                    fill="url(#fadeOp)"/>
+              <defs>
+                <linearGradient id="fadeOp" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="var(--op)" stop-opacity="0.22"/>
+                  <stop offset="1" stop-color="var(--op)" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <!-- Line -->
+              <polyline points="30,70 60,65 90,58 120,52 150,42 180,35 210,30 240,24 270,20 300,16 330,12 370,8"
+                        fill="none" stroke="var(--op)" stroke-width="1.8"/>
+              <!-- Dots -->
+              <circle cx="30" cy="70" r="2.5" fill="var(--op)"/>
+              <circle cx="150" cy="42" r="2.5" fill="var(--op)"/>
+              <circle cx="270" cy="20" r="2.5" fill="var(--op)"/>
+              <circle cx="370" cy="8" r="3.4" fill="var(--paper)" stroke="var(--op)" stroke-width="2"/>
+
+              <!-- X labels -->
+              <text x="30" y="118" class="el">M-12</text>
+              <text x="150" y="118" class="el">M-8</text>
+              <text x="270" y="118" class="el">M-4</text>
+              <text x="355" y="118" class="el">NOW</text>
+
+              <!-- Annotation -->
+              <line x1="370" y1="8" x2="320" y2="30" stroke="var(--ink-mute)" stroke-width="0.5"/>
+              <text x="235" y="32" class="el" fill="var(--ink)" style="font-weight:500;letter-spacing:0.04em">94.2% · +31pp 起点</text>
+            </svg>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;font-family:var(--mono);font-size:10.5px">
+              <div style="padding:8px 10px;background:var(--paper-1);border-radius:3px"><span style="color:var(--ink-mute);letter-spacing:0.1em;font-size:9.5px">RULE 规则</span><div style="font-family:var(--serif);font-size:18px;font-weight:500;margin-top:2px">342 <span style="color:var(--grass);font-size:11px;font-family:var(--mono)">+48</span></div></div>
+              <div style="padding:8px 10px;background:var(--paper-1);border-radius:3px"><span style="color:var(--ink-mute);letter-spacing:0.1em;font-size:9.5px">Runbook</span><div style="font-family:var(--serif);font-size:18px;font-weight:500;margin-top:2px">142 <span style="color:var(--grass);font-size:11px;font-family:var(--mono)">+17</span></div></div>
+              <div style="padding:8px 10px;background:var(--paper-1);border-radius:3px"><span style="color:var(--ink-mute);letter-spacing:0.1em;font-size:9.5px">人工/月</span><div style="font-family:var(--serif);font-size:18px;font-weight:500;margin-top:2px">9 <span style="color:var(--grass);font-size:11px;font-family:var(--mono)">−76%</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
