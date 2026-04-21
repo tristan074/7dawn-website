@@ -130,6 +130,49 @@
     },
     "orbitOps": { "body": "= 运维空间 + 航天配置 — 可独立推广的旗舰品牌" }
   },
+  "architecture": {
+    "titleBefore": "一个 ",
+    "titleEm": "Core OS 底座",
+    "titleAfter": "，五个工作空间共用。",
+    "lead": "对外 = 工作空间的体系感；对内 = 统一产品的一致体验。研发只维护一套底座，行业只换一个 Industry Pack。",
+    "tiers": {
+      "0": {
+        "label": "Tier A",
+        "name": "Workspaces",
+        "note": "五个工作空间",
+        "cells": [
+          { "name": "Design", "note": "设计 Agent" },
+          { "name": "Verify", "note": "验证 Agent" },
+          { "name": "Flow", "note": "流程 Agent" },
+          { "name": "Operate", "note": "运维 Agent" },
+          { "name": "Command", "note": "统筹 + 进化" }
+        ]
+      },
+      "1": {
+        "label": "Tier B",
+        "name": "Core OS",
+        "note": "平台底座",
+        "cells": [
+          { "name": "Multi-Agent Runtime", "note": "多 Agent 协作引擎" },
+          { "name": "Harness Engine", "note": "治理 / 审计 / 回滚" },
+          { "name": "Memory & Evolution", "note": "M0 / M1 / M2 + 进化" },
+          { "name": "Adaptation Workbench", "note": "领域适配工作台" },
+          { "name": "Tool Adapter SDK", "note": "工具链接口" }
+        ]
+      },
+      "2": {
+        "label": "Tier C",
+        "name": "Industry Packs",
+        "note": "行业适配",
+        "cells": [
+          { "name": "Aerospace", "note": "STK / GMAT / MATLAB · GJB" },
+          { "name": "UAV / 低空", "note": "飞控 / 地面站 · 适航" },
+          { "name": "Automotive", "note": "CATIA / NASTRAN · 车标" },
+          { "name": "Energy", "note": "能源行业标准 · 工具链" }
+        ]
+      }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN · 奇点黎明",
     "city": "BEIJING · 北京"

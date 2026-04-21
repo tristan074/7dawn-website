@@ -130,6 +130,49 @@
     },
     "orbitOps": { "body": "= Operate Space + Aerospace config — a flagship brand that can ship standalone" }
   },
+  "architecture": {
+    "titleBefore": "One ",
+    "titleEm": "Core OS",
+    "titleAfter": " — shared across all five workspaces.",
+    "lead": "From outside, workspaces; from inside, one product with a coherent experience. Engineering maintains one OS; each industry just swaps the Pack.",
+    "tiers": {
+      "0": {
+        "label": "Tier A",
+        "name": "Workspaces",
+        "note": "Five workspaces",
+        "cells": [
+          { "name": "Design", "note": "Design agents" },
+          { "name": "Verify", "note": "Verification agents" },
+          { "name": "Flow", "note": "Process agents" },
+          { "name": "Operate", "note": "Ops agents" },
+          { "name": "Command", "note": "Oversight + evolution" }
+        ]
+      },
+      "1": {
+        "label": "Tier B",
+        "name": "Core OS",
+        "note": "Platform foundation",
+        "cells": [
+          { "name": "Multi-Agent Runtime", "note": "Multi-agent orchestration" },
+          { "name": "Harness Engine", "note": "Governance / audit / rollback" },
+          { "name": "Memory & Evolution", "note": "M0 / M1 / M2 + evolution" },
+          { "name": "Adaptation Workbench", "note": "Domain adaptation bench" },
+          { "name": "Tool Adapter SDK", "note": "Toolchain interface" }
+        ]
+      },
+      "2": {
+        "label": "Tier C",
+        "name": "Industry Packs",
+        "note": "Domain kits",
+        "cells": [
+          { "name": "Aerospace", "note": "STK / GMAT / MATLAB · GJB" },
+          { "name": "UAV", "note": "Flight control / ground · airworthiness" },
+          { "name": "Automotive", "note": "CATIA / NASTRAN · auto standards" },
+          { "name": "Energy", "note": "Energy standards · toolchain" }
+        ]
+      }
+    }
+  },
   "footer": {
     "copy": "© 2026 7DAWN",
     "city": "BEIJING"
