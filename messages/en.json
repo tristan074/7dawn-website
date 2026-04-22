@@ -17,6 +17,11 @@
     "cta": "Contact Us",
     "scroll": "SCROLL"
   },
+  "pitch": {
+    "title1": "Have engineering experts work with",
+    "titleEm": "an Agent crew",
+    "lead": "3Studio is the AI-native collaboration and execution platform for complex engineering — one product, five workspaces. Let specialists in design, verification, flow, and operations each lead an Agent crew, collaborating under Harness governance, so that tacit organizational knowledge crystallizes into quantifiable engineering intelligence."
+  },
   "contact": {
     "email": "EMAIL",
     "phone": "PHONE"

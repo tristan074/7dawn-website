@@ -17,6 +17,11 @@
     "cta": "联系我们",
     "scroll": "SCROLL"
   },
+  "pitch": {
+    "title1": "让工程专家带着",
+    "titleEm": "Agent 团队一起工作",
+    "lead": "3Studio 是面向复杂工程行业的 AI 原生协作与执行平台——一个产品，五个工作空间。让设计、验证、流转、运维的专家各带一支 Agent 团队，在 Harness 治理下协同，把组织的隐性知识持续内化为可量化的工程智能资产。"
+  },
   "contact": {
     "email": "EMAIL",
     "phone": "PHONE"
